@@ -51,3 +51,14 @@
   will-change: transform, opacity;
   transform-style: preserve-3d;
 }
+
+/* Ensure any floating Netlify badge stays cleanly positioned below content */
+[class*="netlify-badge"],
+[id*="netlify-badge"],
+.netlify-badge {
+  bottom: 8px !important;
+  right: 12px !important;
+  z-index: 30 !important;
+  opacity: 0.85;
+}
+
