@@ -22,7 +22,6 @@ import {
   Check,
   BadgeCheck,
   Quote,
-  Share2,
 } from 'lucide-react';
 
 const STORAGE_KEY = 'dips_used_reviews_simple';
@@ -89,18 +88,6 @@ export default function App() {
 
   // In-app Reset confirmation state (avoiding window.confirm in iframe)
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-
-  // Browser native Web Share API support detection
-  const [canShare, setCanShare] = useState(false);
-
-  useEffect(() => {
-    if (
-      typeof navigator !== 'undefined' &&
-      typeof navigator.share === 'function'
-    ) {
-      setCanShare(true);
-    }
-  }, []);
 
   // Save used reviews to localStorage
   useEffect(() => {
@@ -190,8 +177,8 @@ export default function App() {
     }
   };
 
-  // Main Action: Copy text & directly open Google Review Link or launch native Share sheet (WhatsApp, etc.)
-  const handleCopyAndAction = async (e: React.MouseEvent) => {
+  // Main Action: Copy text & directly open Google Review Link
+  const handleCopyAndOpen = (e: React.MouseEvent) => {
     if (isFlipping) {
       e.preventDefault();
       return;
@@ -221,21 +208,7 @@ export default function App() {
     setCopiedSuccess(true);
     setTimeout(() => setCopiedSuccess(false), 3800);
 
-    // 4. Use native Web Share API if supported (WhatsApp, Messages, etc.)
-    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
-      e.preventDefault(); // Handle sharing via native bottom sheet
-      try {
-        await navigator.share({
-          title: 'DIPs Computers Google Review',
-          text: reviewText,
-          url: GOOGLE_REVIEW_URL,
-        });
-      } catch {
-        // User cancelled share sheet or dismissed - handled safely
-      }
-    }
-
-    // 5. Instantly show next fresh review with smooth flip
+    // 4. Instantly show next fresh review with smooth flip
     handleNextReviewWithFlip(reviewId);
   };
 
@@ -395,7 +368,7 @@ export default function App() {
               <div className="truncate">
                 <div className="font-bold text-white text-sm">रिव्ह्यू कॉपी झाला! ✅</div>
                 <div className="text-emerald-100 text-[11px] truncate">
-                  ५ स्टार (⭐⭐⭐⭐⭐) निवडून रिव्ह्यू Paste करा.
+                  गुगल पेज उघडत आहे, तिथे ५ स्टार निवडून Paste करा.
                 </div>
               </div>
             </div>
@@ -502,15 +475,18 @@ export default function App() {
                   </span>
                 </div>
 
-                {/* Quick copy in card */}
-                <button
+                {/* Quick copy in card & open Google */}
+                <a
+                  href={GOOGLE_REVIEW_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={handleQuickCardCopy}
-                  className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 font-['Plus_Jakarta_Sans',sans-serif] ${
+                  className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 no-underline font-['Plus_Jakarta_Sans',sans-serif] ${
                     cardCopied
                       ? 'bg-emerald-50 border-emerald-300 text-emerald-700 shadow-2xs'
                       : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:text-blue-700 hover:border-blue-200 shadow-2xs'
                   }`}
-                  title="Copy review text"
+                  title="Copy review & open Google"
                 >
                   {cardCopied ? (
                     <>
@@ -523,7 +499,7 @@ export default function App() {
                       <span>Copy</span>
                     </>
                   )}
-                </button>
+                </a>
               </div>
             </div>
           ) : (
@@ -550,12 +526,12 @@ export default function App() {
           {/* 5. The 2 Main Action Buttons: In English with Clean, Modern Styling */}
           {currentReview && (
             <div className="mt-4 space-y-2.5">
-              {/* Primary 1-Click Action via native anchor or native share API */}
+              {/* Primary 1-Click Action: Copy & Open Google Review Link */}
               <a
                 href={GOOGLE_REVIEW_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={handleCopyAndAction}
+                onClick={handleCopyAndOpen}
                 className={`w-full h-14 px-4 sm:px-5 rounded-2xl flex items-center justify-between text-white no-underline select-none cursor-pointer transition-all duration-200 active:scale-[0.98] font-['Plus_Jakarta_Sans',sans-serif] ${
                   copiedSuccess
                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg shadow-emerald-600/30'
@@ -566,34 +542,21 @@ export default function App() {
                 <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center border border-white/25 shrink-0">
                   {copiedSuccess ? (
                     <CheckCircle2 className="w-5 h-5 text-white animate-bounce" />
-                  ) : canShare ? (
-                    <Share2 className="w-5 h-5 text-white" />
                   ) : (
                     <Copy className="w-5 h-5 text-white" />
                   )}
                 </div>
 
-                {/* Center: English Bold Title & Subtitle */}
-                <div className="flex-1 text-center min-w-0 px-2">
-                  <div className="font-bold text-[14.5px] sm:text-base tracking-tight drop-shadow-xs truncate">
-                    {copiedSuccess
-                      ? (canShare ? 'Copied! Opening Share...' : 'Copied! Opening Google...')
-                      : (canShare ? 'Copy & Share Review' : 'Copy & Open Google Review')}
-                  </div>
-                  {canShare && !copiedSuccess && (
-                    <div className="text-[10px] text-blue-100 font-medium tracking-normal opacity-90 truncate -mt-0.5">
-                      WhatsApp, Messaging & Google
-                    </div>
-                  )}
+                {/* Center: English Bold Title */}
+                <div className="flex-1 text-center font-bold text-[15px] sm:text-base tracking-tight drop-shadow-xs">
+                  {copiedSuccess
+                    ? 'Copied! Opening Google...'
+                    : 'Copy & Open Google Review'}
                 </div>
 
-                {/* Right: Action Indicator */}
+                {/* Right: External Link Indicator */}
                 <div className="w-9 h-9 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
-                  {canShare ? (
-                    <Share2 className="w-4 h-4 text-white/90" />
-                  ) : (
-                    <ExternalLink className="w-4 h-4 text-white/90" />
-                  )}
+                  <ExternalLink className="w-4 h-4 text-white/90" />
                 </div>
               </a>
 
