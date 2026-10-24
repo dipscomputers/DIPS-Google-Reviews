@@ -594,6 +594,18 @@ export default function App() {
         )}
 
       </div>
+
+      {/* 6. "Powered by DIPs" Official Floating Pill Badge (Bottom-Left) */}
+      <div className="fixed bottom-3 left-3 sm:bottom-4 sm:left-4 z-40 animate-fadeIn pointer-events-auto">
+        <div className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#0a192f] hover:bg-[#0f2342] border border-slate-700/80 text-white shadow-xl shadow-slate-950/25 backdrop-blur-md transition-all active:scale-95 select-none cursor-default font-['Plus_Jakarta_Sans',sans-serif]">
+          <div className="w-4 h-4 rounded-full bg-cyan-500/20 flex items-center justify-center shrink-0">
+            <Sparkles className="w-3 h-3 text-cyan-400" />
+          </div>
+          <span className="text-[11.5px] sm:text-xs text-slate-300 font-medium tracking-wide">
+            Powered by <strong className="text-white font-bold tracking-tight font-sans">DIPs</strong>
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
