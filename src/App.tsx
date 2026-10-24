@@ -17,7 +17,6 @@ import {
   RotateCw,
   CheckCircle2,
   Sparkles,
-  RotateCcw,
   ShieldCheck,
   Check,
   BadgeCheck,
@@ -84,9 +83,6 @@ export default function App() {
 
   // In-card copy only feedback
   const [cardCopied, setCardCopied] = useState(false);
-
-  // In-app Reset confirmation state (avoiding window.confirm in iframe)
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Save used reviews to localStorage
   useEffect(() => {
@@ -270,7 +266,6 @@ export default function App() {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {}
-    setShowResetConfirm(false);
     getNextReview();
   };
 
@@ -420,7 +415,7 @@ export default function App() {
               onTouchEnd={handleTouchEnd}
               onMouseDown={handleTouchStart}
               onMouseUp={handleTouchEnd}
-              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-7 shadow-[0_18px_45px_-8px_rgba(15,23,42,0.1),0_4px_18px_-3px_rgba(15,23,42,0.04)] flex flex-col justify-between min-h-[290px] sm:min-h-[330px] transition-all relative overflow-hidden cursor-grab active:cursor-grabbing select-none ${
+              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_-8px_rgba(15,23,42,0.08),0_4px_14px_-3px_rgba(15,23,42,0.03)] flex flex-col justify-between min-h-[225px] sm:min-h-[250px] transition-all relative overflow-hidden cursor-grab active:cursor-grabbing select-none ${
                 isFlipping ? 'animate-card-flip' : ''
               }`}
             >
@@ -437,55 +432,55 @@ export default function App() {
 
               <div>
                 {/* Header: Reviewer Profile + Google Official Badge */}
-                <div className="flex items-start justify-between gap-2.5 mb-3.5 pb-3.5 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-start justify-between gap-2.5 mb-3 pb-3 border-b border-slate-100">
+                  <div className="flex items-center gap-2.5">
                     {/* Customer Avatar with subtle ring & verified tick */}
                     <div className="relative">
                       <div
-                        className={`w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-br ${avatarColor} text-white font-bold text-base sm:text-lg flex items-center justify-center shadow-xs ring-2 ring-white shrink-0`}
+                        className={`w-10.5 h-10.5 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br ${avatarColor} text-white font-bold text-sm sm:text-base flex items-center justify-center shadow-xs ring-2 ring-white shrink-0`}
                       >
                         {avatarLetter}
                       </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 bg-white rounded-full flex items-center justify-center shadow-2xs">
-                        <BadgeCheck className="w-4.5 h-4.5 text-blue-600 fill-blue-50" />
+                      <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-2xs">
+                        <BadgeCheck className="w-4 h-4 text-blue-600 fill-blue-50" />
                       </div>
                     </div>
 
                     <div>
-                      <div className="text-[14px] sm:text-[15px] font-bold text-slate-800 flex items-center gap-1.5">
+                      <div className="text-[13px] sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
                         <span>स्थानिक ग्राहक</span>
-                        <span className="text-[10.5px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                        <span className="text-[10px] font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-100">
                           Verified
                         </span>
                       </div>
-                      <div className="text-[11.5px] sm:text-xs text-slate-400 font-medium mt-0.5">
+                      <div className="text-[11px] sm:text-[11.5px] text-slate-400 font-medium">
                         शिरपूर जैन • DIPs Computers
                       </div>
                     </div>
                   </div>
 
                   {/* Google Review Badge */}
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 shadow-2xs shrink-0">
-                    <GoogleGIcon className="w-4 h-4 shrink-0" />
-                    <span className="text-[11.5px] font-bold text-slate-700 tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200/80 shadow-2xs shrink-0">
+                    <GoogleGIcon className="w-3.5 h-3.5 shrink-0" />
+                    <span className="text-[11px] font-bold text-slate-700 tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
                       Review
                     </span>
                   </div>
                 </div>
 
-                {/* Main Review Text: Larger Font, Generous Height & Typography */}
-                <div className="py-6 sm:py-8 min-h-[155px] sm:min-h-[180px] flex items-center relative my-1">
-                  <p className="relative z-1 text-[22px] sm:text-[25px] font-extrabold text-slate-900 leading-snug sm:leading-relaxed select-all tracking-tight">
+                {/* Main Review Text: Balanced Font & Typography */}
+                <div className="py-4 sm:py-5 min-h-[110px] sm:min-h-[130px] flex items-center relative my-1">
+                  <p className="relative z-1 text-[17px] sm:text-[19px] font-bold text-slate-900 leading-relaxed select-all tracking-tight">
                     "{currentReview.text}"
                   </p>
                 </div>
               </div>
 
               {/* Bottom Card Footer: Category tag & Quick copy pill */}
-              <div className="pt-3.5 sm:pt-4 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 shadow-2xs">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-                  <span className="font-bold text-slate-700 text-xs sm:text-[12.5px]">
+              <div className="pt-3 sm:pt-3.5 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/70">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+                  <span className="font-semibold text-slate-700 text-[11px] sm:text-[11.5px]">
                     {currentReview.categoryTitle}
                   </span>
                 </div>
@@ -496,7 +491,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleQuickCardCopy}
-                  className={`px-3.5 py-1.5 sm:py-2 rounded-xl border text-xs sm:text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 no-underline font-['Plus_Jakarta_Sans',sans-serif] ${
+                  className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 no-underline font-['Plus_Jakarta_Sans',sans-serif] ${
                     cardCopied
                       ? 'bg-emerald-50 border-emerald-300 text-emerald-700 shadow-2xs'
                       : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:text-blue-700 hover:border-blue-200 shadow-2xs'
@@ -505,12 +500,12 @@ export default function App() {
                 >
                   {cardCopied ? (
                     <>
-                      <Check className="w-4 h-4 text-emerald-600" />
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
                       <span>Copied!</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-4 h-4 text-slate-500" />
+                      <Copy className="w-3.5 h-3.5 text-slate-500" />
                       <span>Copy</span>
                     </>
                   )}
@@ -597,65 +592,6 @@ export default function App() {
             </div>
           </div>
         )}
-
-        {/* 6. Footer: Progress Bar & Reset Action */}
-        <footer className="pt-2 sm:pt-2.5 border-t border-slate-200/90 flex flex-col gap-1.5 text-[11px] text-slate-500 relative">
-          <div className="flex items-center justify-between text-[11px] pr-28 sm:pr-0">
-            <div>
-              वापरलेले रिव्ह्यू:{' '}
-              <strong className="text-slate-900 tabular-nums">{usedCount}</strong> / {totalReviews}
-              <span className="text-slate-400 ml-1">({progressPercent}%)</span>
-            </div>
-
-            <button
-              onClick={() => setShowResetConfirm(true)}
-              className="text-[11px] text-slate-500 hover:text-rose-600 flex items-center gap-1 transition-colors cursor-pointer font-medium"
-              title="सर्व रिव्ह्यू नव्याने सुरू करा"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>रीसेट करा</span>
-            </button>
-          </div>
-
-          {/* Smooth Mini Progress Bar */}
-          <div className="w-full h-1.5 bg-slate-200/80 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-        </footer>
-
-          {/* In-App Non-Blocking Confirmation Dialog */}
-          {showResetConfirm && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fadeIn">
-              <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xl max-w-xs w-full text-center">
-                <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3">
-                  <RotateCcw className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-slate-900 text-sm mb-1">
-                  सर्व रिव्ह्यू रीसेट करायचे का?
-                </h3>
-                <p className="text-xs text-slate-500 mb-4">
-                  वापरलेल्या रिव्ह्यूंची नोंद मिटवली जाईल आणि {totalReviews} रिव्ह्यूज नव्याने सुरू होतील.
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => setShowResetConfirm(false)}
-                    className="py-2 px-3 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-medium cursor-pointer"
-                  >
-                    रद्द करा
-                  </button>
-                  <button
-                    onClick={executeReset}
-                    className="py-2 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer shadow-xs"
-                  >
-                    होय, रीसेट करा
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
 
       </div>
     </div>
