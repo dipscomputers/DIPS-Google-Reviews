@@ -420,7 +420,7 @@ export default function App() {
               onTouchEnd={handleTouchEnd}
               onMouseDown={handleTouchStart}
               onMouseUp={handleTouchEnd}
-              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_-8px_rgba(15,23,42,0.08),0_4px_14px_-3px_rgba(15,23,42,0.03)] flex flex-col justify-between min-h-[220px] sm:min-h-[245px] transition-all relative overflow-hidden cursor-grab active:cursor-grabbing select-none ${
+              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-7 shadow-[0_16px_40px_-8px_rgba(15,23,42,0.09),0_4px_16px_-3px_rgba(15,23,42,0.04)] flex flex-col justify-between min-h-[260px] sm:min-h-[290px] transition-all relative overflow-hidden cursor-grab active:cursor-grabbing select-none ${
                 isFlipping ? 'animate-card-flip' : ''
               }`}
             >
@@ -442,7 +442,7 @@ export default function App() {
                     {/* Customer Avatar with subtle ring & verified tick */}
                     <div className="relative">
                       <div
-                        className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br ${avatarColor} text-white font-bold text-sm sm:text-base flex items-center justify-center shadow-xs ring-2 ring-white shrink-0`}
+                        className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br ${avatarColor} text-white font-bold text-sm sm:text-base flex items-center justify-center shadow-xs ring-2 ring-white shrink-0`}
                       >
                         {avatarLetter}
                       </div>
@@ -474,8 +474,8 @@ export default function App() {
                 </div>
 
                 {/* Main Review Text: Larger Font, Generous Height & Typography */}
-                <div className="py-3.5 sm:py-5 min-h-[105px] sm:min-h-[120px] flex items-center relative my-1">
-                  <p className="relative z-1 text-[18.5px] sm:text-[21px] font-bold text-slate-900 leading-snug sm:leading-relaxed select-all tracking-tight">
+                <div className="py-5 sm:py-7 min-h-[135px] sm:min-h-[155px] flex items-center relative my-1">
+                  <p className="relative z-1 text-[19.5px] sm:text-[22px] font-bold text-slate-900 leading-snug sm:leading-relaxed select-all tracking-tight">
                     "{currentReview.text}"
                   </p>
                 </div>
