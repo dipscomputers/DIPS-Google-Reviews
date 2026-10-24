@@ -253,17 +253,17 @@ export default function App() {
   const avatarColor = AVATAR_COLORS[avatarColorIndex];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-[#f4f7fb] to-[#e8edf5] text-slate-800 flex flex-col items-center justify-start p-3 sm:p-4 pt-2 sm:pt-3 pb-12 sm:pb-8 relative overflow-x-hidden selection:bg-blue-100 selection:text-blue-900 font-['Noto_Sans_Devanagari',sans-serif]">
+    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-[#f4f7fb] to-[#e8edf5] text-slate-800 flex flex-col items-center justify-start p-3 sm:p-4 pt-2.5 sm:pt-3.5 pb-10 sm:pb-8 relative overflow-x-hidden selection:bg-blue-100 selection:text-blue-900 font-['Noto_Sans_Devanagari',sans-serif]">
       {/* Background Decorative Ambient Radial Glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-0">
         <div className="absolute -top-36 left-1/2 -translate-x-1/2 w-[540px] h-[340px] bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-10 -right-20 w-80 h-80 bg-amber-400/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="w-full max-w-md mx-auto flex-1 flex flex-col justify-start relative z-10 space-y-2 sm:space-y-3">
+      <div className="w-full max-w-md mx-auto flex flex-col relative z-10 space-y-3 sm:space-y-3.5">
 
         {/* 1. Header: Professional Google Verified Business Badge */}
-        <header className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl shadow-sm overflow-hidden">
+        <header className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden shrink-0">
           {/* Authentic Google 4-Color Signature Accent Bar */}
           <div className="h-1.5 w-full flex">
             <div className="flex-1 bg-[#4285F4]" />
@@ -272,17 +272,17 @@ export default function App() {
             <div className="flex-1 bg-[#34A853]" />
           </div>
 
-          <div className="p-2.5 sm:p-3 flex items-center justify-between gap-2.5">
+          <div className="px-3.5 py-2.5 sm:py-3 flex items-center justify-between gap-2.5">
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
               {/* Google G Logo Emblem */}
-              <div className="w-10 h-10 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs">
+              <div className="w-9.5 h-9.5 sm:w-10 sm:h-10 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs">
                 <GoogleGIcon className="w-5 h-5" />
               </div>
 
               {/* Business Name and Rating Details */}
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <h1 className="font-extrabold text-slate-900 text-[15px] sm:text-base leading-tight font-['Plus_Jakarta_Sans',sans-serif] tracking-tight">
+                  <h1 className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight font-['Plus_Jakarta_Sans',sans-serif] tracking-tight">
                     DIPs Computers
                   </h1>
                   <BadgeCheck className="w-4 h-4 text-blue-600 fill-blue-50 shrink-0" />
@@ -316,9 +316,9 @@ export default function App() {
           <div className="grid grid-cols-4 gap-1 p-1 bg-slate-200/80 backdrop-blur-xs rounded-xl text-xs font-semibold">
             <button
               onClick={() => setCategory('all')}
-              className={`py-1.5 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
+              className={`py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate text-[11.5px] sm:text-xs ${
                 category === 'all'
-                  ? 'bg-white text-blue-600 shadow-sm font-bold'
+                  ? 'bg-white text-blue-600 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -326,21 +326,10 @@ export default function App() {
             </button>
 
             <button
-              onClick={() => setCategory('csc')}
-              className={`py-1.5 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
-                category === 'csc'
-                  ? 'bg-white text-blue-600 shadow-sm font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              CSC सेवा
-            </button>
-
-            <button
               onClick={() => setCategory('computer')}
-              className={`py-1.5 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
+              className={`py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate text-[11.5px] sm:text-xs ${
                 category === 'computer'
-                  ? 'bg-white text-blue-600 shadow-sm font-bold'
+                  ? 'bg-white text-blue-600 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -349,26 +338,37 @@ export default function App() {
 
             <button
               onClick={() => setCategory('online')}
-              className={`py-1.5 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
+              className={`py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate text-[11.5px] sm:text-xs ${
                 category === 'online'
-                  ? 'bg-white text-blue-600 shadow-sm font-bold'
+                  ? 'bg-white text-blue-600 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               ऑनलाइन
+            </button>
+
+            <button
+              onClick={() => setCategory('csc')}
+              className={`py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate text-[11.5px] sm:text-xs ${
+                category === 'csc'
+                  ? 'bg-white text-blue-600 shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              CSC सेवा
             </button>
           </div>
         </div>
 
         {/* 3. Copied Success Toast Message */}
         {copiedSuccess && (
-          <div className="p-2.5 sm:p-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl shadow-md flex items-center justify-between gap-2 text-xs font-medium animate-fadeIn">
+          <div className="p-2.5 sm:p-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl shadow-md flex items-center justify-between gap-2 text-xs font-medium animate-fadeIn">
             <div className="flex items-center gap-2 min-w-0">
-              <CheckCircle2 className="w-5 h-5 text-white shrink-0" />
+              <CheckCircle2 className="w-4.5 h-4.5 text-white shrink-0" />
               <div className="truncate">
-                <div className="font-bold text-white text-sm">रिव्ह्यू कॉपी झाला! ✅</div>
-                <div className="text-emerald-100 text-[11px] truncate">
-                  गुगल पेज उघडत आहे, तिथे ५ स्टार निवडून Paste करा.
+                <div className="font-bold text-white text-xs sm:text-sm">रिव्ह्यू कॉपी झाला! ✅</div>
+                <div className="text-emerald-100 text-[10.5px] truncate">
+                  गुगल पेज उघडत आहे, तिथे पेस्ट करा.
                 </div>
               </div>
             </div>
@@ -376,7 +376,7 @@ export default function App() {
               href={GOOGLE_REVIEW_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2.5 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-[11px] shrink-0 border border-white/30 flex items-center gap-1 no-underline font-['Plus_Jakarta_Sans',sans-serif] active:scale-95 transition-all"
+              className="px-2.5 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold text-[10.5px] shrink-0 border border-white/30 flex items-center gap-1 no-underline font-['Plus_Jakarta_Sans',sans-serif] active:scale-95 transition-all"
             >
               <span>Google Page</span>
               <ExternalLink className="w-3 h-3" />
@@ -384,11 +384,11 @@ export default function App() {
           </div>
         )}
 
-        {/* 4. The Hero: Authentic Google Review Card with 3D Flip */}
-        <div className="w-full mt-1.5 sm:mt-2.5 mb-0" style={{ perspective: '1000px' }}>
+        {/* 4. The Hero: Authentic Google Review Card (Enlarged & Prominent) */}
+        <div className="w-full" style={{ perspective: '1000px' }}>
           {currentReview ? (
             <div
-              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5.5 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.08),0_4px_12px_-4px_rgba(15,23,42,0.04)] flex flex-col justify-between transition-all relative overflow-hidden ${
+              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_-8px_rgba(15,23,42,0.08),0_4px_14px_-3px_rgba(15,23,42,0.03)] flex flex-col justify-between min-h-[220px] sm:min-h-[245px] transition-all relative overflow-hidden ${
                 isFlipping ? 'animate-card-flip' : ''
               }`}
             >
@@ -401,32 +401,32 @@ export default function App() {
               </div>
 
               {/* Subtle ambient card glow */}
-              <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
 
               <div>
                 {/* Header: Reviewer Profile + Google Official Badge */}
-                <div className="flex items-start justify-between gap-2 mb-2 pt-0.5 pb-2 border-b border-slate-100">
+                <div className="flex items-start justify-between gap-2.5 mb-3.5 pb-3 border-b border-slate-100">
                   <div className="flex items-center gap-2.5">
                     {/* Customer Avatar with subtle ring & verified tick */}
                     <div className="relative">
                       <div
-                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br ${avatarColor} text-white font-bold text-sm sm:text-base flex items-center justify-center shadow-sm ring-2 ring-white shrink-0`}
+                        className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br ${avatarColor} text-white font-bold text-sm sm:text-base flex items-center justify-center shadow-xs ring-2 ring-white shrink-0`}
                       >
                         {avatarLetter}
                       </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-white rounded-full flex items-center justify-center shadow-2xs">
-                        <BadgeCheck className="w-3.5 h-3.5 text-blue-600 fill-blue-50" />
+                      <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-2xs">
+                        <BadgeCheck className="w-4 h-4 text-blue-600 fill-blue-50" />
                       </div>
                     </div>
 
                     <div>
-                      <div className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                      <div className="text-[13px] sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
                         <span>स्थानिक ग्राहक</span>
                         <span className="text-[10px] font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-100">
                           Verified
                         </span>
                       </div>
-                      <div className="text-[10px] sm:text-[11px] text-slate-400 font-medium">
+                      <div className="text-[11px] sm:text-[11.5px] text-slate-400 font-medium">
                         शिरपूर जैन • DIPs Computers
                       </div>
                     </div>
@@ -435,42 +435,26 @@ export default function App() {
                   {/* Google Review Badge */}
                   <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200/80 shadow-2xs shrink-0">
                     <GoogleGIcon className="w-3.5 h-3.5 shrink-0" />
-                    <span className="text-[10.5px] sm:text-[11px] font-bold text-slate-700 tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
+                    <span className="text-[11px] font-bold text-slate-700 tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
                       Review
                     </span>
                   </div>
                 </div>
 
-                {/* Rating Bar: 5 Google Stars + 5.0 score */}
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="flex items-center gap-0.5 text-[#FBBC05]">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-[#FBBC05] text-[#FBBC05] drop-shadow-2xs"
-                      />
-                    ))}
-                  </div>
-                  <span className="text-xs font-extrabold text-slate-800">5.0</span>
-                  <span className="text-[10.5px] text-slate-400 font-medium">
-                    • उत्कृष्ट सेवा अनुभव
-                  </span>
-                </div>
-
-                {/* Main Review Text with Elegant Typography & Quote Watermark */}
-                <div className="py-1.5 sm:py-2 min-h-[64px] sm:min-h-[78px] flex items-center relative my-0.5">
-                  <Quote className="w-8 h-8 text-slate-100 absolute -top-1 -left-2 pointer-events-none rotate-180" />
-                  <p className="relative z-1 text-[15px] sm:text-[17px] font-semibold text-slate-800 leading-snug sm:leading-relaxed select-all tracking-normal">
+                {/* Main Review Text: Larger Font, Generous Height & Typography */}
+                <div className="py-3.5 sm:py-5 min-h-[100px] sm:min-h-[115px] flex items-center relative my-1">
+                  <Quote className="w-9 h-9 text-slate-200/90 absolute -top-1 -left-2 pointer-events-none rotate-180" />
+                  <p className="relative z-1 text-[16.5px] sm:text-[18px] font-semibold text-slate-800 leading-relaxed sm:leading-[1.75] select-all tracking-normal">
                     "{currentReview.text}"
                   </p>
                 </div>
               </div>
 
               {/* Bottom Card Footer: Category tag & Quick copy pill */}
-              <div className="pt-2 sm:pt-2.5 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+              <div className="pt-3 sm:pt-3.5 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/70">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-                  <span className="font-semibold text-slate-700 text-[10.5px] sm:text-[11px]">
+                  <span className="font-semibold text-slate-700 text-[11px] sm:text-[11.5px]">
                     {currentReview.categoryTitle}
                   </span>
                 </div>
@@ -481,7 +465,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleQuickCardCopy}
-                  className={`px-2.5 py-1 rounded-xl border text-[10.5px] sm:text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 no-underline font-['Plus_Jakarta_Sans',sans-serif] ${
+                  className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 no-underline font-['Plus_Jakarta_Sans',sans-serif] ${
                     cardCopied
                       ? 'bg-emerald-50 border-emerald-300 text-emerald-700 shadow-2xs'
                       : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:text-blue-700 hover:border-blue-200 shadow-2xs'
@@ -505,13 +489,13 @@ export default function App() {
           ) : (
             /* All Completed State */
             <div className="bg-white border border-slate-200 rounded-3xl p-6 text-center shadow-md">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-3 shadow-xs">
-                <Sparkles className="w-6 h-6 text-amber-500" />
+              <div className="w-11 h-11 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-2.5 shadow-xs">
+                <Sparkles className="w-5 h-5 text-amber-500" />
               </div>
               <h3 className="text-base font-bold text-slate-900 mb-1">
                 सर्व {totalReviews} रिव्ह्यू संपले आहेत! 🎉
               </h3>
-              <p className="text-xs text-slate-500 mb-4">
+              <p className="text-xs text-slate-500 mb-3.5">
                 सर्व रिव्ह्यूज वापरले गेले आहेत. पुन्हा नव्याने सुरू करण्यासाठी खालील बटण दाबा.
               </p>
               <button
@@ -522,66 +506,65 @@ export default function App() {
               </button>
             </div>
           )}
-
-          {/* 5. The 2 Main Action Buttons: In English with Clean, Modern Styling */}
-          {currentReview && (
-            <div className="mt-2.5 sm:mt-3.5 space-y-2 sm:space-y-2.5">
-              {/* Primary 1-Click Action: Copy & Open Google Review Link */}
-              <a
-                href={GOOGLE_REVIEW_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={handleCopyAndOpen}
-                className={`w-full h-12 sm:h-14 px-3.5 sm:px-5 rounded-2xl flex items-center justify-between text-white no-underline select-none cursor-pointer transition-all duration-200 active:scale-[0.98] font-['Plus_Jakarta_Sans',sans-serif] ${
-                  copiedSuccess
-                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 shadow-md shadow-emerald-600/30'
-                    : 'bg-gradient-to-r from-[#1a73e8] via-[#1b66c9] to-[#0d47a1] shadow-md shadow-blue-500/25 hover:brightness-105'
-                } ${isFlipping ? 'pointer-events-none opacity-80' : ''}`}
-              >
-                {/* Left: Icon Badge */}
-                <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center border border-white/25 shrink-0">
-                  {copiedSuccess ? (
-                    <CheckCircle2 className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-white animate-bounce" />
-                  ) : (
-                    <Copy className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
-                  )}
-                </div>
-
-                {/* Center: English Bold Title */}
-                <div className="flex-1 text-center font-bold text-[14px] sm:text-base tracking-tight drop-shadow-xs">
-                  {copiedSuccess
-                    ? 'Copied! Opening Google...'
-                    : 'Copy & Open Google Review'}
-                </div>
-
-                {/* Right: External Link Indicator */}
-                <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
-                  <ExternalLink className="w-3.5 h-3.5 text-white/90" />
-                </div>
-              </a>
-
-              {/* Secondary: Next Review in English */}
-              <button
-                onClick={() => handleNextReviewWithFlip()}
-                disabled={isFlipping}
-                className="w-full h-10.5 sm:h-12 px-3.5 rounded-xl sm:rounded-2xl bg-white border border-slate-300 hover:border-blue-400 hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-2xs hover:shadow-xs active:scale-[0.98] transition-all duration-200 cursor-pointer disabled:opacity-60 font-['Plus_Jakarta_Sans',sans-serif]"
-              >
-                <RotateCw
-                  className={`w-3.5 h-3.5 text-blue-600 transition-transform duration-500 ${
-                    isFlipping ? 'rotate-180' : ''
-                  }`}
-                />
-                <span>Show Next Review</span>
-                <span className="text-slate-400 font-normal">↻</span>
-              </button>
-            </div>
-          )}
         </div>
 
+        {/* 5. The 2 Main Action Buttons: In English with Clean, Modern Styling */}
+        {currentReview && (
+          <div className="space-y-2.5 pt-0.5">
+            {/* Primary 1-Click Action: Copy & Open Google Review Link */}
+            <a
+              href={GOOGLE_REVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleCopyAndOpen}
+              className={`w-full h-12.5 sm:h-13.5 px-4 sm:px-5 rounded-2xl flex items-center justify-between text-white no-underline select-none cursor-pointer transition-all duration-200 active:scale-[0.98] font-['Plus_Jakarta_Sans',sans-serif] ${
+                copiedSuccess
+                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 shadow-md shadow-emerald-600/30'
+                  : 'bg-gradient-to-r from-[#1a73e8] via-[#1b66c9] to-[#0d47a1] shadow-md shadow-blue-500/25 hover:brightness-105'
+              } ${isFlipping ? 'pointer-events-none opacity-80' : ''}`}
+            >
+              {/* Left: Icon Badge */}
+              <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center border border-white/25 shrink-0">
+                {copiedSuccess ? (
+                  <CheckCircle2 className="w-4.5 h-4.5 text-white animate-bounce" />
+                ) : (
+                  <Copy className="w-4.5 h-4.5 text-white" />
+                )}
+              </div>
 
-        {/* 7. Footer: Progress Bar & Reset Action */}
-        <footer className="mt-auto mb-8 sm:mb-2 pt-2 border-t border-slate-200/90 flex flex-col gap-1.5 text-[11px] text-slate-500 relative">
-          <div className="flex items-center justify-between text-[11px]">
+              {/* Center: English Bold Title */}
+              <div className="flex-1 text-center font-bold text-[14.5px] sm:text-base tracking-tight drop-shadow-xs">
+                {copiedSuccess
+                  ? 'Copied! Opening Google...'
+                  : 'Copy & Open Google Review'}
+              </div>
+
+              {/* Right: External Link Indicator */}
+              <div className="w-8 h-8 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
+                <ExternalLink className="w-3.5 h-3.5 text-white/90" />
+              </div>
+            </a>
+
+            {/* Secondary: Next Review in English */}
+            <button
+              onClick={() => handleNextReviewWithFlip()}
+              disabled={isFlipping}
+              className="w-full h-11 sm:h-12 px-3.5 rounded-xl sm:rounded-2xl bg-white border border-slate-300 hover:border-blue-400 hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-2xs hover:shadow-xs active:scale-[0.98] transition-all duration-200 cursor-pointer disabled:opacity-60 font-['Plus_Jakarta_Sans',sans-serif]"
+            >
+              <RotateCw
+                className={`w-3.5 h-3.5 text-blue-600 transition-transform duration-500 ${
+                  isFlipping ? 'rotate-180' : ''
+                }`}
+              />
+              <span>Show Next Review</span>
+              <span className="text-slate-400 font-normal">↻</span>
+            </button>
+          </div>
+        )}
+
+        {/* 6. Footer: Progress Bar & Reset Action */}
+        <footer className="pt-2 sm:pt-2.5 border-t border-slate-200/90 flex flex-col gap-1.5 text-[11px] text-slate-500 relative">
+          <div className="flex items-center justify-between text-[11px] pr-28 sm:pr-0">
             <div>
               वापरलेले रिव्ह्यू:{' '}
               <strong className="text-slate-900 tabular-nums">{usedCount}</strong> / {totalReviews}
@@ -590,10 +573,10 @@ export default function App() {
 
             <button
               onClick={() => setShowResetConfirm(true)}
-              className="text-[11px] text-slate-400 hover:text-rose-600 flex items-center gap-1 transition-colors cursor-pointer"
+              className="text-[11px] text-slate-500 hover:text-rose-600 flex items-center gap-1 transition-colors cursor-pointer font-medium"
               title="सर्व रिव्ह्यू नव्याने सुरू करा"
             >
-              <RotateCcw className="w-3 h-3" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>रीसेट करा</span>
             </button>
           </div>
@@ -605,6 +588,7 @@ export default function App() {
               style={{ width: `${progressPercent}%` }}
             />
           </div>
+        </footer>
 
           {/* In-App Non-Blocking Confirmation Dialog */}
           {showResetConfirm && (
@@ -636,7 +620,6 @@ export default function App() {
               </div>
             </div>
           )}
-        </footer>
 
       </div>
     </div>
