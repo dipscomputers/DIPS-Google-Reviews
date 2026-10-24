@@ -253,14 +253,14 @@ export default function App() {
   const avatarColor = AVATAR_COLORS[avatarColorIndex];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-[#f4f7fb] to-[#e8edf5] text-slate-800 flex flex-col items-center justify-start p-3 sm:p-4 pt-1.5 sm:pt-2.5 pb-24 sm:pb-8 relative overflow-x-hidden selection:bg-blue-100 selection:text-blue-900 font-['Noto_Sans_Devanagari',sans-serif]">
+    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-[#f4f7fb] to-[#e8edf5] text-slate-800 flex flex-col items-center justify-start p-3 sm:p-4 pt-2 sm:pt-3 pb-12 sm:pb-8 relative overflow-x-hidden selection:bg-blue-100 selection:text-blue-900 font-['Noto_Sans_Devanagari',sans-serif]">
       {/* Background Decorative Ambient Radial Glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-0">
         <div className="absolute -top-36 left-1/2 -translate-x-1/2 w-[540px] h-[340px] bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-10 -right-20 w-80 h-80 bg-amber-400/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="w-full max-w-md mx-auto flex-1 flex flex-col justify-start relative z-10 space-y-2 sm:space-y-2.5">
+      <div className="w-full max-w-md mx-auto flex-1 flex flex-col justify-start relative z-10 space-y-2 sm:space-y-3">
 
         {/* 1. Header: Professional Google Verified Business Badge */}
         <header className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl shadow-sm overflow-hidden">
@@ -272,7 +272,7 @@ export default function App() {
             <div className="flex-1 bg-[#34A853]" />
           </div>
 
-          <div className="p-2.5 sm:p-3 flex items-center justify-between gap-2">
+          <div className="p-2.5 sm:p-3 flex items-center justify-between gap-2.5">
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
               {/* Google G Logo Emblem */}
               <div className="w-10 h-10 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs">
@@ -316,7 +316,7 @@ export default function App() {
           <div className="grid grid-cols-4 gap-1 p-1 bg-slate-200/80 backdrop-blur-xs rounded-xl text-xs font-semibold">
             <button
               onClick={() => setCategory('all')}
-              className={`py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
+              className={`py-1.5 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
                 category === 'all'
                   ? 'bg-white text-blue-600 shadow-sm font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -327,7 +327,7 @@ export default function App() {
 
             <button
               onClick={() => setCategory('csc')}
-              className={`py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
+              className={`py-1.5 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
                 category === 'csc'
                   ? 'bg-white text-blue-600 shadow-sm font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -338,7 +338,7 @@ export default function App() {
 
             <button
               onClick={() => setCategory('computer')}
-              className={`py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
+              className={`py-1.5 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
                 category === 'computer'
                   ? 'bg-white text-blue-600 shadow-sm font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -349,7 +349,7 @@ export default function App() {
 
             <button
               onClick={() => setCategory('online')}
-              className={`py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
+              className={`py-1.5 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
                 category === 'online'
                   ? 'bg-white text-blue-600 shadow-sm font-bold'
                   : 'text-slate-600 hover:text-slate-900'
@@ -362,7 +362,7 @@ export default function App() {
 
         {/* 3. Copied Success Toast Message */}
         {copiedSuccess && (
-          <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl shadow-md flex items-center justify-between gap-2 text-xs font-medium animate-fadeIn">
+          <div className="p-2.5 sm:p-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl shadow-md flex items-center justify-between gap-2 text-xs font-medium animate-fadeIn">
             <div className="flex items-center gap-2 min-w-0">
               <CheckCircle2 className="w-5 h-5 text-white shrink-0" />
               <div className="truncate">
@@ -385,10 +385,10 @@ export default function App() {
         )}
 
         {/* 4. The Hero: Authentic Google Review Card with 3D Flip */}
-        <div className="w-full" style={{ perspective: '1000px' }}>
+        <div className="w-full mt-1.5 sm:mt-2.5 mb-0" style={{ perspective: '1000px' }}>
           {currentReview ? (
             <div
-              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.08),0_4px_12px_-4px_rgba(15,23,42,0.04)] flex flex-col justify-between transition-all relative overflow-hidden ${
+              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5.5 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.08),0_4px_12px_-4px_rgba(15,23,42,0.04)] flex flex-col justify-between transition-all relative overflow-hidden ${
                 isFlipping ? 'animate-card-flip' : ''
               }`}
             >
@@ -415,14 +415,14 @@ export default function App() {
                         {avatarLetter}
                       </div>
                       <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-white rounded-full flex items-center justify-center shadow-2xs">
-                        <BadgeCheck className="w-3 h-3 text-blue-600 fill-blue-50" />
+                        <BadgeCheck className="w-3.5 h-3.5 text-blue-600 fill-blue-50" />
                       </div>
                     </div>
 
                     <div>
                       <div className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
                         <span>स्थानिक ग्राहक</span>
-                        <span className="text-[9.5px] font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-100">
+                        <span className="text-[10px] font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-100">
                           Verified
                         </span>
                       </div>
@@ -433,7 +433,7 @@ export default function App() {
                   </div>
 
                   {/* Google Review Badge */}
-                  <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200/80 shadow-2xs shrink-0">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200/80 shadow-2xs shrink-0">
                     <GoogleGIcon className="w-3.5 h-3.5 shrink-0" />
                     <span className="text-[10.5px] sm:text-[11px] font-bold text-slate-700 tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
                       Review
@@ -447,18 +447,18 @@ export default function App() {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-[#FBBC05] text-[#FBBC05] drop-shadow-2xs"
+                        className="w-4 h-4 fill-[#FBBC05] text-[#FBBC05] drop-shadow-2xs"
                       />
                     ))}
                   </div>
                   <span className="text-xs font-extrabold text-slate-800">5.0</span>
-                  <span className="text-[10px] text-slate-400 font-medium">
+                  <span className="text-[10.5px] text-slate-400 font-medium">
                     • उत्कृष्ट सेवा अनुभव
                   </span>
                 </div>
 
                 {/* Main Review Text with Elegant Typography & Quote Watermark */}
-                <div className="py-1.5 min-h-[64px] sm:min-h-[76px] flex items-center relative my-0.5">
+                <div className="py-1.5 sm:py-2 min-h-[64px] sm:min-h-[78px] flex items-center relative my-0.5">
                   <Quote className="w-8 h-8 text-slate-100 absolute -top-1 -left-2 pointer-events-none rotate-180" />
                   <p className="relative z-1 text-[15px] sm:text-[17px] font-semibold text-slate-800 leading-snug sm:leading-relaxed select-all tracking-normal">
                     "{currentReview.text}"
@@ -467,8 +467,8 @@ export default function App() {
               </div>
 
               {/* Bottom Card Footer: Category tag & Quick copy pill */}
-              <div className="pt-2 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
-                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-50 border border-slate-200/70">
+              <div className="pt-2 sm:pt-2.5 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/70">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
                   <span className="font-semibold text-slate-700 text-[10.5px] sm:text-[11px]">
                     {currentReview.categoryTitle}
@@ -525,37 +525,37 @@ export default function App() {
 
           {/* 5. The 2 Main Action Buttons: In English with Clean, Modern Styling */}
           {currentReview && (
-            <div className="mt-2 space-y-1.5">
+            <div className="mt-2.5 sm:mt-3.5 space-y-2 sm:space-y-2.5">
               {/* Primary 1-Click Action: Copy & Open Google Review Link */}
               <a
                 href={GOOGLE_REVIEW_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleCopyAndOpen}
-                className={`w-full h-12 sm:h-13 px-3.5 sm:px-5 rounded-2xl flex items-center justify-between text-white no-underline select-none cursor-pointer transition-all duration-200 active:scale-[0.98] font-['Plus_Jakarta_Sans',sans-serif] ${
+                className={`w-full h-12 sm:h-14 px-3.5 sm:px-5 rounded-2xl flex items-center justify-between text-white no-underline select-none cursor-pointer transition-all duration-200 active:scale-[0.98] font-['Plus_Jakarta_Sans',sans-serif] ${
                   copiedSuccess
                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 shadow-md shadow-emerald-600/30'
                     : 'bg-gradient-to-r from-[#1a73e8] via-[#1b66c9] to-[#0d47a1] shadow-md shadow-blue-500/25 hover:brightness-105'
                 } ${isFlipping ? 'pointer-events-none opacity-80' : ''}`}
               >
                 {/* Left: Icon Badge */}
-                <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center border border-white/25 shrink-0">
+                <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center border border-white/25 shrink-0">
                   {copiedSuccess ? (
-                    <CheckCircle2 className="w-4.5 h-4.5 text-white animate-bounce" />
+                    <CheckCircle2 className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-white animate-bounce" />
                   ) : (
-                    <Copy className="w-4 h-4 text-white" />
+                    <Copy className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
                   )}
                 </div>
 
                 {/* Center: English Bold Title */}
-                <div className="flex-1 text-center font-bold text-[14px] sm:text-[15.5px] tracking-tight drop-shadow-xs">
+                <div className="flex-1 text-center font-bold text-[14px] sm:text-base tracking-tight drop-shadow-xs">
                   {copiedSuccess
                     ? 'Copied! Opening Google...'
                     : 'Copy & Open Google Review'}
                 </div>
 
                 {/* Right: External Link Indicator */}
-                <div className="w-8 h-8 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
                   <ExternalLink className="w-3.5 h-3.5 text-white/90" />
                 </div>
               </a>
@@ -564,7 +564,7 @@ export default function App() {
               <button
                 onClick={() => handleNextReviewWithFlip()}
                 disabled={isFlipping}
-                className="w-full h-10 sm:h-11 px-3 rounded-xl sm:rounded-2xl bg-white border border-slate-300 hover:border-blue-400 hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 shadow-2xs hover:shadow-xs active:scale-[0.98] transition-all duration-200 cursor-pointer disabled:opacity-60 font-['Plus_Jakarta_Sans',sans-serif]"
+                className="w-full h-10.5 sm:h-12 px-3.5 rounded-xl sm:rounded-2xl bg-white border border-slate-300 hover:border-blue-400 hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-2xs hover:shadow-xs active:scale-[0.98] transition-all duration-200 cursor-pointer disabled:opacity-60 font-['Plus_Jakarta_Sans',sans-serif]"
               >
                 <RotateCw
                   className={`w-3.5 h-3.5 text-blue-600 transition-transform duration-500 ${
@@ -580,7 +580,7 @@ export default function App() {
 
 
         {/* 7. Footer: Progress Bar & Reset Action */}
-        <footer className="mt-auto pt-2 border-t border-slate-200/90 flex flex-col gap-1 text-[11px] text-slate-500 relative">
+        <footer className="mt-auto mb-8 sm:mb-2 pt-2 border-t border-slate-200/90 flex flex-col gap-1.5 text-[11px] text-slate-500 relative">
           <div className="flex items-center justify-between text-[11px]">
             <div>
               वापरलेले रिव्ह्यू:{' '}
