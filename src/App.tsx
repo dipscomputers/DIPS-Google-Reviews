@@ -21,7 +21,6 @@ import {
   ShieldCheck,
   Check,
   BadgeCheck,
-  Quote,
 } from 'lucide-react';
 
 const STORAGE_KEY = 'dips_used_reviews_simple';
@@ -220,7 +219,36 @@ export default function App() {
     setTimeout(() => setCardCopied(false), 2000);
   };
 
-  // Flip animation handler when 'दुसरा रिव्ह्यू' is clicked
+  // Swipe gesture tracking for mobile touch & desktop drag
+  const touchStartXRef = React.useRef<number | null>(null);
+  const touchStartYRef = React.useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    touchStartXRef.current = clientX;
+    touchStartYRef.current = clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent | React.MouseEvent) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+
+    const clientX = 'changedTouches' in e ? e.changedTouches[0].clientX : e.clientX;
+    const clientY = 'changedTouches' in e ? e.changedTouches[0].clientY : e.clientY;
+
+    const deltaX = clientX - touchStartXRef.current;
+    const deltaY = clientY - touchStartYRef.current;
+
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+
+    // Trigger swipe if horizontal distance > 35px and horizontal movement > vertical
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 35) {
+      handleNextReviewWithFlip();
+    }
+  };
+
+  // Flip animation handler when 'दुसरा रिव्ह्यू' is clicked or swiped
   const handleNextReviewWithFlip = (excludeId?: number) => {
     if (isFlipping) return;
     setIsFlipping(true);
@@ -388,7 +416,11 @@ export default function App() {
         <div className="w-full" style={{ perspective: '1000px' }}>
           {currentReview ? (
             <div
-              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_-8px_rgba(15,23,42,0.08),0_4px_14px_-3px_rgba(15,23,42,0.03)] flex flex-col justify-between min-h-[220px] sm:min-h-[245px] transition-all relative overflow-hidden ${
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              onMouseDown={handleTouchStart}
+              onMouseUp={handleTouchEnd}
+              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_-8px_rgba(15,23,42,0.08),0_4px_14px_-3px_rgba(15,23,42,0.03)] flex flex-col justify-between min-h-[220px] sm:min-h-[245px] transition-all relative overflow-hidden cursor-grab active:cursor-grabbing select-none ${
                 isFlipping ? 'animate-card-flip' : ''
               }`}
             >
@@ -442,9 +474,8 @@ export default function App() {
                 </div>
 
                 {/* Main Review Text: Larger Font, Generous Height & Typography */}
-                <div className="py-3.5 sm:py-5 min-h-[100px] sm:min-h-[115px] flex items-center relative my-1">
-                  <Quote className="w-9 h-9 text-slate-200/90 absolute -top-1 -left-2 pointer-events-none rotate-180" />
-                  <p className="relative z-1 text-[16.5px] sm:text-[18px] font-semibold text-slate-800 leading-relaxed sm:leading-[1.75] select-all tracking-normal">
+                <div className="py-3.5 sm:py-5 min-h-[105px] sm:min-h-[120px] flex items-center relative my-1">
+                  <p className="relative z-1 text-[18.5px] sm:text-[21px] font-bold text-slate-900 leading-snug sm:leading-relaxed select-all tracking-tight">
                     "{currentReview.text}"
                   </p>
                 </div>
@@ -559,6 +590,11 @@ export default function App() {
               <span>Show Next Review</span>
               <span className="text-slate-400 font-normal">↻</span>
             </button>
+
+            {/* Mobile Swipe Hint */}
+            <div className="text-[10px] text-slate-400 text-center font-medium flex items-center justify-center gap-1 sm:hidden pt-0.5">
+              <span>👉 कार्डवर डावीकडे/उजवीकडे स्वाईप करून पुढील रिव्ह्यू पहा 👈</span>
+            </div>
           </div>
         )}
 
