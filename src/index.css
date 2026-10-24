@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardFlip {
+  0% {
+    transform: perspective(900px) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+  48% {
+    transform: perspective(900px) rotateY(90deg) scale(0.95);
+    opacity: 0.15;
+  }
+  52% {
+    transform: perspective(900px) rotateY(-90deg) scale(0.95);
+    opacity: 0.15;
+  }
+  100% {
+    transform: perspective(900px) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-card-flip {
+  animation: cardFlip 0.4s cubic-bezier(0.25, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+}
