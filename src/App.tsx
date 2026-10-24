@@ -420,7 +420,7 @@ export default function App() {
               onTouchEnd={handleTouchEnd}
               onMouseDown={handleTouchStart}
               onMouseUp={handleTouchEnd}
-              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-7 shadow-[0_16px_40px_-8px_rgba(15,23,42,0.09),0_4px_16px_-3px_rgba(15,23,42,0.04)] flex flex-col justify-between min-h-[260px] sm:min-h-[290px] transition-all relative overflow-hidden cursor-grab active:cursor-grabbing select-none ${
+              className={`bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-7 shadow-[0_18px_45px_-8px_rgba(15,23,42,0.1),0_4px_18px_-3px_rgba(15,23,42,0.04)] flex flex-col justify-between min-h-[290px] sm:min-h-[330px] transition-all relative overflow-hidden cursor-grab active:cursor-grabbing select-none ${
                 isFlipping ? 'animate-card-flip' : ''
               }`}
             >
@@ -437,55 +437,55 @@ export default function App() {
 
               <div>
                 {/* Header: Reviewer Profile + Google Official Badge */}
-                <div className="flex items-start justify-between gap-2.5 mb-3.5 pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-2.5">
+                <div className="flex items-start justify-between gap-2.5 mb-3.5 pb-3.5 border-b border-slate-100">
+                  <div className="flex items-center gap-3">
                     {/* Customer Avatar with subtle ring & verified tick */}
                     <div className="relative">
                       <div
-                        className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br ${avatarColor} text-white font-bold text-sm sm:text-base flex items-center justify-center shadow-xs ring-2 ring-white shrink-0`}
+                        className={`w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-br ${avatarColor} text-white font-bold text-base sm:text-lg flex items-center justify-center shadow-xs ring-2 ring-white shrink-0`}
                       >
                         {avatarLetter}
                       </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-2xs">
-                        <BadgeCheck className="w-4 h-4 text-blue-600 fill-blue-50" />
+                      <div className="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 bg-white rounded-full flex items-center justify-center shadow-2xs">
+                        <BadgeCheck className="w-4.5 h-4.5 text-blue-600 fill-blue-50" />
                       </div>
                     </div>
 
                     <div>
-                      <div className="text-[13px] sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                      <div className="text-[14px] sm:text-[15px] font-bold text-slate-800 flex items-center gap-1.5">
                         <span>स्थानिक ग्राहक</span>
-                        <span className="text-[10px] font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-100">
+                        <span className="text-[10.5px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
                           Verified
                         </span>
                       </div>
-                      <div className="text-[11px] sm:text-[11.5px] text-slate-400 font-medium">
+                      <div className="text-[11.5px] sm:text-xs text-slate-400 font-medium mt-0.5">
                         शिरपूर जैन • DIPs Computers
                       </div>
                     </div>
                   </div>
 
                   {/* Google Review Badge */}
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200/80 shadow-2xs shrink-0">
-                    <GoogleGIcon className="w-3.5 h-3.5 shrink-0" />
-                    <span className="text-[11px] font-bold text-slate-700 tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 shadow-2xs shrink-0">
+                    <GoogleGIcon className="w-4 h-4 shrink-0" />
+                    <span className="text-[11.5px] font-bold text-slate-700 tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
                       Review
                     </span>
                   </div>
                 </div>
 
                 {/* Main Review Text: Larger Font, Generous Height & Typography */}
-                <div className="py-5 sm:py-7 min-h-[135px] sm:min-h-[155px] flex items-center relative my-1">
-                  <p className="relative z-1 text-[19.5px] sm:text-[22px] font-bold text-slate-900 leading-snug sm:leading-relaxed select-all tracking-tight">
+                <div className="py-6 sm:py-8 min-h-[155px] sm:min-h-[180px] flex items-center relative my-1">
+                  <p className="relative z-1 text-[22px] sm:text-[25px] font-extrabold text-slate-900 leading-snug sm:leading-relaxed select-all tracking-tight">
                     "{currentReview.text}"
                   </p>
                 </div>
               </div>
 
               {/* Bottom Card Footer: Category tag & Quick copy pill */}
-              <div className="pt-3 sm:pt-3.5 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/70">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-                  <span className="font-semibold text-slate-700 text-[11px] sm:text-[11.5px]">
+              <div className="pt-3.5 sm:pt-4 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 shadow-2xs">
+                  <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+                  <span className="font-bold text-slate-700 text-xs sm:text-[12.5px]">
                     {currentReview.categoryTitle}
                   </span>
                 </div>
@@ -496,7 +496,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleQuickCardCopy}
-                  className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 no-underline font-['Plus_Jakarta_Sans',sans-serif] ${
+                  className={`px-3.5 py-1.5 sm:py-2 rounded-xl border text-xs sm:text-[12.5px] font-bold flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 no-underline font-['Plus_Jakarta_Sans',sans-serif] ${
                     cardCopied
                       ? 'bg-emerald-50 border-emerald-300 text-emerald-700 shadow-2xs'
                       : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:text-blue-700 hover:border-blue-200 shadow-2xs'
@@ -505,12 +505,12 @@ export default function App() {
                 >
                   {cardCopied ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <Check className="w-4 h-4 text-emerald-600" />
                       <span>Copied!</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-slate-500" />
+                      <Copy className="w-4 h-4 text-slate-500" />
                       <span>Copy</span>
                     </>
                   )}
