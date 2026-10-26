@@ -162,6 +162,7 @@ export default function App() {
   // DOM element refs for automatic smooth scrolling without manual user scrolling
   const optionsSectionRef = useRef<HTMLDivElement>(null);
   const reviewsSectionRef = useRef<HTMLDivElement>(null);
+  const bottomActionsRef = useRef<HTMLDivElement>(null);
   const feedbackSectionRef = useRef<HTMLDivElement>(null);
 
   // Helper to mark a review as used and save to localStorage
@@ -221,14 +222,50 @@ export default function App() {
     setTimeout(performScroll, 180);
   };
 
-  // Auto-scroll directly and reliably to Generated Reviews whenever reviews are created or loaded
+  // Auto-scroll directly down to the action buttons (Review us on Google, More Reviews, Reset)
+  const scrollToGeneratedButtons = () => {
+    const target = bottomActionsRef.current || document.getElementById('generated-bottom-actions');
+    if (!target) {
+      const fallback = reviewsSectionRef.current || document.getElementById('generated-reviews-section');
+      if (fallback) smoothScrollToElement(fallback, -16);
+      return;
+    }
+
+    const performScroll = () => {
+      try {
+        const rect = target.getBoundingClientRect();
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        // Scroll so that the bottom action buttons are in the lower portion of the viewport with comfortable clearance
+        const targetTop = Math.max(0, rect.bottom + scrollTop - window.innerHeight + 24);
+
+        window.scrollTo({
+          top: targetTop,
+          behavior: 'smooth',
+        });
+      } catch {
+        // fallback
+      }
+
+      try {
+        target.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      } catch {
+        // fallback
+      }
+    };
+
+    performScroll();
+    requestAnimationFrame(performScroll);
+    setTimeout(performScroll, 70);
+    setTimeout(performScroll, 180);
+    setTimeout(performScroll, 320);
+  };
+
+  // Auto-scroll directly down to the action buttons whenever reviews are created or loaded
   useEffect(() => {
     if (generatedReviews.length > 0) {
       const scrollTimer = setTimeout(() => {
-        const el = reviewsSectionRef.current || document.getElementById('generated-reviews-section');
-        if (el) {
-          smoothScrollToElement(el, -16);
-        }
+        scrollToGeneratedButtons();
       }, 50);
       return () => clearTimeout(scrollTimer);
     }
@@ -429,12 +466,9 @@ export default function App() {
 
       triggerToast('✨ निवडलेले रिव्ह्यूज तयार झाले! (Reviews loaded!)');
 
-      // Auto-scroll directly to generated reviews
+      // Auto-scroll directly down to the generated action buttons (Review us on Google & More Reviews/Reset)
       setTimeout(() => {
-        const el = reviewsSectionRef.current || document.getElementById('generated-reviews-section');
-        if (el) {
-          smoothScrollToElement(el, -16);
-        }
+        scrollToGeneratedButtons();
       }, 50);
     }, 450);
   };
@@ -1253,41 +1287,44 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Main Action: Review us on Google Button matching reference */}
-                <a
-                  href={GOOGLE_REVIEW_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={handleReviewOnGoogleClick}
-                  className="w-full py-4.5 rounded-2xl font-bold text-white text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-3 no-underline"
-                  style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)' }}
-                >
-                  <GoogleGIcon className="w-5 h-5 shrink-0" />
-                  <span>Review us on Google</span>
-                </a>
-
-                {/* 2 Action Buttons: Left is More Reviews, Right is Reset - Perfectly Aligned */}
-                <div className="grid grid-cols-2 gap-2.5 pt-2">
-                  {/* Left Button: More Reviews */}
-                  <button
-                    type="button"
-                    onClick={handleGenerateAIReviews}
-                    disabled={isGenerating}
-                    className="h-11 sm:h-12 w-full rounded-xl border border-purple-200 bg-purple-50/90 hover:bg-purple-100/90 active:scale-98 text-purple-700 font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 whitespace-nowrap transition-all cursor-pointer shadow-2xs hover:border-purple-300 disabled:opacity-50"
+                {/* Main Action Buttons Container: Review us on Google + More Reviews & Reset */}
+                <div ref={bottomActionsRef} id="generated-bottom-actions" className="space-y-2.5 pt-1 scroll-mt-6">
+                  {/* Main Action: Review us on Google Button matching reference */}
+                  <a
+                    href={GOOGLE_REVIEW_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={handleReviewOnGoogleClick}
+                    className="w-full py-4.5 rounded-2xl font-bold text-white text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-3 no-underline"
+                    style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)' }}
                   >
-                    <RotateCw className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600 shrink-0 ${isGenerating ? 'animate-spin' : ''}`} />
-                    <span className="truncate">More Reviews</span>
-                  </button>
+                    <GoogleGIcon className="w-5 h-5 shrink-0" />
+                    <span>Review us on Google</span>
+                  </a>
 
-                  {/* Right Button: Reset */}
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    className="h-11 sm:h-12 w-full rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 active:scale-98 text-gray-700 font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 whitespace-nowrap transition-all cursor-pointer shadow-2xs hover:border-gray-300"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 shrink-0" />
-                    <span>Reset</span>
-                  </button>
+                  {/* 2 Action Buttons: Left is More Reviews, Right is Reset - Perfectly Aligned */}
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {/* Left Button: More Reviews */}
+                    <button
+                      type="button"
+                      onClick={handleGenerateAIReviews}
+                      disabled={isGenerating}
+                      className="h-11 sm:h-12 w-full rounded-xl border border-purple-200 bg-purple-50/90 hover:bg-purple-100/90 active:scale-98 text-purple-700 font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 whitespace-nowrap transition-all cursor-pointer shadow-2xs hover:border-purple-300 disabled:opacity-50"
+                    >
+                      <RotateCw className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600 shrink-0 ${isGenerating ? 'animate-spin' : ''}`} />
+                      <span className="truncate">More Reviews</span>
+                    </button>
+
+                    {/* Right Button: Reset */}
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="h-11 sm:h-12 w-full rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 active:scale-98 text-gray-700 font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 whitespace-nowrap transition-all cursor-pointer shadow-2xs hover:border-gray-300"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 shrink-0" />
+                      <span>Reset</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
