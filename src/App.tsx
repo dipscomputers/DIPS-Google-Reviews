@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { GOOGLE_REVIEW_URL, REVIEWS_DATA } from './data/reviews';
 import {
@@ -143,6 +143,11 @@ export default function App() {
     }
   });
 
+  // DOM element refs for automatic smooth scrolling without manual user scrolling
+  const optionsSectionRef = useRef<HTMLDivElement>(null);
+  const reviewsSectionRef = useRef<HTMLDivElement>(null);
+  const feedbackSectionRef = useRef<HTMLDivElement>(null);
+
   // Helper to mark a review as used and save to localStorage
   const markReviewAsUsed = (reviewText: string) => {
     if (!reviewText) return;
@@ -170,7 +175,7 @@ export default function App() {
     }, 3200);
   };
 
-  // Handle star selection
+  // Handle star selection - Automatically scrolls smoothly to options so user doesn't have to scroll down!
   const handleRatingSelect = (rating: number) => {
     setSelectedRating(rating);
     setGeneratedReviews([]);
@@ -184,6 +189,25 @@ export default function App() {
         origin: { y: 0.6 },
         colors: ['#7c3aed', '#4f46e5', '#fbbf24', '#34A853'],
       });
+
+      // Auto-scroll directly to options so user doesn't have to scroll manually
+      setTimeout(() => {
+        if (optionsSectionRef.current) {
+          optionsSectionRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }, 70);
+    } else {
+      setTimeout(() => {
+        if (feedbackSectionRef.current) {
+          feedbackSectionRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }, 70);
     }
   };
 
@@ -355,6 +379,16 @@ export default function App() {
       setIsGenerating(false);
 
       triggerToast('✨ निवडलेले रिव्ह्यूज तयार झाले! (Reviews loaded!)');
+
+      // Auto-scroll directly to reviews so user doesn't have to scroll manually
+      setTimeout(() => {
+        if (reviewsSectionRef.current) {
+          reviewsSectionRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }, 70);
     }, 450);
   };
 
@@ -694,7 +728,7 @@ export default function App() {
 
             {/* FLOW 1: 1-3 Stars -> Private Feedback Form */}
             {selectedRating > 0 && selectedRating <= 3 && !feedbackSubmitted && (
-              <div className="pt-5 border-t border-gray-100 animate-fadeIn">
+              <div ref={feedbackSectionRef} className="pt-5 border-t border-gray-100 animate-fadeIn scroll-mt-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600">
                     <MessageSquare className="w-4.5 h-4.5" />
@@ -781,7 +815,7 @@ export default function App() {
 
             {/* FLOW 2: 4-5 Stars -> 4 Options (3 Categories + 1 Text Box) */}
             {selectedRating >= 4 && generatedReviews.length === 0 && (
-              <div className="pt-5 border-t border-gray-100 animate-fadeIn">
+              <div ref={optionsSectionRef} className="pt-5 border-t border-gray-100 animate-fadeIn scroll-mt-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600">
                     <Tag className="w-4.5 h-4.5" />
@@ -998,7 +1032,7 @@ export default function App() {
 
             {/* FLOW 2 (Part 2): Generated AI Reviews Display */}
             {selectedRating >= 4 && generatedReviews.length > 0 && (
-              <div className="pt-5 border-t border-gray-100 animate-fadeIn space-y-4">
+              <div ref={reviewsSectionRef} className="pt-5 border-t border-gray-100 animate-fadeIn space-y-4 scroll-mt-6">
                 {/* AI Status Badge & Change Topic Link */}
                 <div className="flex items-center justify-between mb-2">
                   <div className="px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 bg-purple-50 text-purple-700 border border-purple-100">
@@ -1010,6 +1044,14 @@ export default function App() {
                     onClick={() => {
                       setGeneratedReviews([]);
                       setSelectedReviewIndex(-1);
+                      setTimeout(() => {
+                        if (optionsSectionRef.current) {
+                          optionsSectionRef.current.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                          });
+                        }
+                      }, 70);
                     }}
                     className="text-xs text-purple-600 hover:text-purple-800 font-semibold cursor-pointer underline underline-offset-2 flex items-center gap-1"
                   >
