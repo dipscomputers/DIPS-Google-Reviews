@@ -118,8 +118,9 @@ export default function App() {
 
   // Selected keywords / categories (computer, csc, online)
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
-  // Custom text box input keyword
+  // Custom text box input keyword & radio selection state
   const [customKeyword, setCustomKeyword] = useState<string>('');
+  const [isCustomSelected, setIsCustomSelected] = useState<boolean>(false);
 
   // Generated reviews state
   const [isGenerating, setIsGenerating] = useState(false);
@@ -194,93 +195,167 @@ export default function App() {
     setSelectedReviewIndex(-1);
     setSelectedKeywords([]);
     setCustomKeyword('');
+    setIsCustomSelected(false);
     setFeedbackSubmitted(false);
     setFeedbackMessage('');
     triggerToast('🔄 Reset successfully!');
   };
 
-  // Toggle Keyword / Category selection
+  // Toggle Keyword / Category selection (Enforce max 1 or 2 options at a time)
   const toggleKeyword = (categoryId: string) => {
     if (selectedKeywords.includes(categoryId)) {
       setSelectedKeywords(selectedKeywords.filter((k) => k !== categoryId));
     } else {
+      const currentTotal = selectedKeywords.length + (isCustomSelected ? 1 : 0);
+      if (currentTotal >= 2) {
+        triggerToast('⚠️ कमाल २ पर्याय निवडता येतील (Maximum 2 topics allowed)');
+        return;
+      }
       setSelectedKeywords([...selectedKeywords, categoryId]);
     }
   };
 
-  // Generate AI Reviews based on selected categories and custom keyword text box
+  // Toggle Custom Reviews Text Box (Enforce max 1 or 2 options at a time)
+  const toggleCustomSelection = () => {
+    if (isCustomSelected) {
+      setIsCustomSelected(false);
+    } else {
+      const currentTotal = selectedKeywords.length;
+      if (currentTotal >= 2) {
+        triggerToast('⚠️ कमाल २ पर्याय निवडता येतील (Maximum 2 topics allowed)');
+        return;
+      }
+      setIsCustomSelected(true);
+    }
+  };
+
+  // Generate AI Reviews strictly based on selected categories and custom text
   const handleGenerateAIReviews = () => {
+    const totalSelected = selectedKeywords.length + (isCustomSelected ? 1 : 0);
+
+    // If nothing selected, guide user to select 1 or 2 options
+    if (totalSelected === 0) {
+      triggerToast('⚠️ कृपया १ किंवा कमाल २ पर्याय निवडा (Please select 1 or 2 topics)');
+      return;
+    }
+
     setIsGenerating(true);
 
     setTimeout(() => {
-      // Filter out all reviews that have already been used/submitted
-      let unusedPool = REVIEWS_DATA.filter((r) => !usedReviews.includes(r.text));
-
-      // If nearly all 300 reviews have been used, auto-reset so system continuously works
-      if (unusedPool.length < 3) {
-        unusedPool = [...REVIEWS_DATA];
-        setUsedReviews([]);
-        try {
-          localStorage.removeItem('dips_used_reviews_list');
-        } catch {
-          // ignore
-        }
-      }
-
-      const activeCategories = selectedKeywords;
-      const searchTxt = customKeyword.trim().toLowerCase();
-
-      // Filter based on selected categories and custom text
-      let matchedReviews: string[] = [];
-
-      unusedPool.forEach((r) => {
-        let isMatch = false;
-
-        // If categories are selected, check if review belongs to any selected category
-        if (activeCategories.length > 0 && activeCategories.includes(r.category)) {
-          isMatch = true;
-        }
-
-        // If custom text is provided, check if text matches review
-        if (searchTxt && r.text.toLowerCase().includes(searchTxt)) {
-          isMatch = true;
-        }
-
-        if (isMatch) {
-          matchedReviews.push(r.text);
-        }
-      });
-
-      // If no category or custom text selected, or if matches are empty, use whole unusedPool
-      const pool =
-        matchedReviews.length >= 3
-          ? matchedReviews
-          : matchedReviews.length > 0
-          ? [...matchedReviews, ...unusedPool.map((r) => r.text)]
-          : unusedPool.map((r) => r.text);
-
-      // Exclude reviews currently visible on screen so clicking "More Reviews" always loads fresh ones
-      const freshCandidates = pool.filter((text) => !generatedReviews.includes(text));
-      const finalPool = freshCandidates.length >= 3 ? freshCandidates : pool;
+      const activeCategories = selectedKeywords as ('csc' | 'computer' | 'online')[];
+      const trimmedCustom = isCustomSelected ? customKeyword.trim() : '';
 
       let finalReviews: string[] = [];
-      const trimmedCustom = customKeyword.trim();
 
-      // If user typed a custom review (sentence/phrase), place it as option 1 alongside 2 recommendations
-      if (trimmedCustom.length >= 8) {
-        const otherPool = finalPool.filter((text) => text !== trimmedCustom);
-        const otherShuffled = [...new Set(otherPool)].sort(() => 0.5 - Math.random()).slice(0, 2);
-        finalReviews = [trimmedCustom, ...otherShuffled];
-      } else {
-        finalReviews = [...new Set(finalPool)].sort(() => 0.5 - Math.random()).slice(0, 3);
+      // SCENARIO 1: Standard categories selected (1 or 2 categories)
+      if (activeCategories.length > 0) {
+        // Pool strictly filtered to ONLY the selected categories - zero pollution from unselected topics!
+        const strictlySelectedReviews = REVIEWS_DATA.filter((r) =>
+          activeCategories.includes(r.category)
+        );
+
+        // Filter out already used reviews from this category pool
+        let unusedTargetPool = strictlySelectedReviews.filter(
+          (r) => !usedReviews.includes(r.text)
+        );
+
+        // If unused pool is getting low in these categories, recycle them so reviews never stop
+        if (unusedTargetPool.length < 3) {
+          unusedTargetPool = [...strictlySelectedReviews];
+          const targetTexts = new Set(strictlySelectedReviews.map((r) => r.text));
+          setUsedReviews((prev) => prev.filter((t) => !targetTexts.has(t)));
+        }
+
+        // Avoid showing the exact same reviews that are currently visible on screen
+        const freshCandidates = unusedTargetPool.filter(
+          (r) => !generatedReviews.includes(r.text)
+        );
+        const candidatePool = freshCandidates.length >= 3 ? freshCandidates : unusedTargetPool;
+
+        // If user also checked custom box AND wrote custom review (>= 5 chars):
+        if (isCustomSelected && trimmedCustom.length >= 5) {
+          const remainingPool = candidatePool.filter((r) => r.text !== trimmedCustom);
+          const shuffledRemaining = [...remainingPool].sort(() => 0.5 - Math.random());
+          const otherTwo = shuffledRemaining.slice(0, 2).map((r) => r.text);
+          finalReviews = [trimmedCustom, ...otherTwo];
+        } else if (activeCategories.length === 2) {
+          // Exactly 2 categories selected: guarantee reviews strictly represent both selected topics!
+          const cat1 = activeCategories[0];
+          const cat2 = activeCategories[1];
+
+          const pool1 = candidatePool.filter((r) => r.category === cat1);
+          const pool2 = candidatePool.filter((r) => r.category === cat2);
+
+          const shuffled1 = [...(pool1.length > 0 ? pool1 : candidatePool)].sort(
+            () => 0.5 - Math.random()
+          );
+          const shuffled2 = [...(pool2.length > 0 ? pool2 : candidatePool)].sort(
+            () => 0.5 - Math.random()
+          );
+
+          if (Math.random() > 0.5) {
+            finalReviews = [
+              shuffled1[0]?.text,
+              shuffled1[1]?.text,
+              shuffled2[0]?.text,
+            ].filter(Boolean) as string[];
+          } else {
+            finalReviews = [
+              shuffled1[0]?.text,
+              shuffled2[0]?.text,
+              shuffled2[1]?.text,
+            ].filter(Boolean) as string[];
+          }
+
+          // If still less than 3, top up strictly from candidatePool
+          if (finalReviews.length < 3) {
+            const extra = candidatePool
+              .filter((r) => !finalReviews.includes(r.text))
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 3 - finalReviews.length)
+              .map((r) => r.text);
+            finalReviews = [...finalReviews, ...extra];
+          }
+        } else {
+          // Exactly 1 category selected: 100% strictly from this single selected category!
+          const shuffled = [...candidatePool].sort(() => 0.5 - Math.random());
+          finalReviews = shuffled.slice(0, 3).map((r) => r.text);
+        }
+      }
+      // SCENARIO 2: Only Custom Reviews Text Box is selected (no standard category)
+      else if (isCustomSelected) {
+        if (trimmedCustom.length >= 5) {
+          const searchLower = trimmedCustom.toLowerCase();
+          const keywordMatches = REVIEWS_DATA.filter((r) =>
+            r.text.toLowerCase().includes(searchLower)
+          );
+
+          if (keywordMatches.length >= 2) {
+            const shuffled = [...keywordMatches].sort(() => 0.5 - Math.random());
+            finalReviews = [trimmedCustom, shuffled[0].text, shuffled[1].text];
+          } else {
+            const words = searchLower.split(/\s+/).filter((w) => w.length >= 3);
+            const partialMatches = REVIEWS_DATA.filter((r) =>
+              words.some((w) => r.text.toLowerCase().includes(w))
+            );
+            const pool = partialMatches.length >= 2 ? partialMatches : REVIEWS_DATA;
+            const shuffled = [...pool].sort(() => 0.5 - Math.random());
+            finalReviews = [trimmedCustom, shuffled[0].text, shuffled[1].text];
+          }
+        } else {
+          // Prompt user to enter their custom review text
+          triggerToast('✍️ कृपया तुमचा रिव्ह्यू किंवा कीवर्ड टाईप करा (Please enter your review)');
+          setIsGenerating(false);
+          return;
+        }
       }
 
       setGeneratedReviews(finalReviews);
       setSelectedReviewIndex(0); // Auto-select first review
       setIsGenerating(false);
 
-      triggerToast('✨ Reviews Loaded Successfully!');
-    }, 500);
+      triggerToast('✨ निवडलेले रिव्ह्यूज तयार झाले! (Reviews loaded!)');
+    }, 450);
   };
 
   // Safe copy to clipboard helper that runs synchronously without extension messaging timeouts
@@ -716,7 +791,7 @@ export default function App() {
                       कीवर्ड किंवा सेवा निवडा (Select Topic)
                     </h3>
                     <p className="text-xs text-gray-500">
-                      खालीलपैकी पर्याय निवडा किंवा स्वतः कीवर्ड टाईप करा
+                      खालीलपैकी १ किंवा कमाल २ पर्याय निवडा (Select 1 or max 2 topics)
                     </p>
                   </div>
                 </div>
@@ -777,75 +852,123 @@ export default function App() {
                     );
                   })}
 
-                  {/* Option 4: ✍️ Custom Reviews Text Box */}
+                  {/* Option 4: ✍️ Custom Reviews Text Box with Radio Button & Expandable Textarea */}
                   <div
-                    className={`w-full p-3 sm:p-3.5 rounded-2xl transition-all duration-200 border ${
-                      customKeyword.trim().length > 0
-                        ? 'bg-purple-50/60 border-purple-300 shadow-xs'
-                        : 'bg-slate-50/90 border-slate-200/80 hover:border-purple-200'
+                    className={`w-full rounded-2xl transition-all duration-200 border overflow-hidden ${
+                      isCustomSelected
+                        ? 'border-purple-300 bg-purple-50/40 shadow-xs'
+                        : 'bg-slate-50/90 hover:bg-purple-50/50 hover:border-purple-200 border-slate-200/80'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 bg-white shadow-xs border border-slate-200/60">
+                    {/* Header Row Clickable as Radio Button */}
+                    <button
+                      type="button"
+                      onClick={toggleCustomSelection}
+                      className={`w-full p-3 sm:p-3.5 text-left transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 relative select-none ${
+                        isCustomSelected
+                          ? 'text-white'
+                          : 'text-slate-800 active:scale-99'
+                      }`}
+                      style={{
+                        background: isCustomSelected
+                          ? 'linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)'
+                          : undefined,
+                      }}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 ${
+                            isCustomSelected ? 'bg-white/20' : 'bg-white shadow-xs border border-slate-200/60'
+                          }`}
+                        >
                           ✍️
                         </div>
                         <div className="min-w-0">
-                          <span className="font-bold text-[13px] sm:text-sm text-slate-800 leading-tight block">
+                          <span className="font-bold text-[13px] sm:text-sm leading-tight block">
                             Custom Reviews Text Box
                           </span>
-                          <p className="text-[11px] sm:text-xs text-slate-500 leading-snug mt-0.5">
+                          <p
+                            className={`text-[11px] sm:text-xs leading-snug mt-0.5 truncate ${
+                              isCustomSelected ? 'text-purple-100 font-medium' : 'text-slate-500'
+                            }`}
+                          >
                             स्वतःचा रिव्ह्यू लिहा किंवा कीवर्ड टाईप करा (Write your own review or topic)
                           </p>
                         </div>
                       </div>
-                      {customKeyword && (
-                        <button
-                          type="button"
-                          onClick={() => setCustomKeyword('')}
-                          className="text-xs text-slate-400 hover:text-slate-600 font-medium cursor-pointer shrink-0"
-                        >
-                          Clear
-                        </button>
-                      )}
-                    </div>
 
-                    <div className="relative">
-                      <textarea
-                        rows={3}
-                        value={customKeyword}
-                        onChange={(e) => setCustomKeyword(e.target.value)}
-                        placeholder="उदा. शिरपूर जैन मधील सर्वात उत्तम कॉम्प्युटर क्लास आणि आपले सरकार सेवा केंद्र! काम वेळेत आणि अचूक होते, दिपक सरांचे मार्गदर्शन खूप छान आहे..."
-                        className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none bg-white text-slate-900 placeholder:text-slate-400 transition-all resize-none leading-relaxed"
-                      />
-                      {customKeyword && (
-                        <div className="flex items-center justify-between pt-1 px-1 text-[11px] text-slate-400">
-                          <span>{customKeyword.length} अक्षरे (characters)</span>
-                          <span className="text-purple-600 font-medium">Custom review तयार आहे</span>
+                      {/* Matching Radio Button Circle */}
+                      <div className="shrink-0 pl-1">
+                        {isCustomSelected ? (
+                          <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-xs">
+                            <Check className="w-3.5 h-3.5 text-purple-600 stroke-[3]" />
+                          </div>
+                        ) : (
+                          <div className="w-5 h-5 rounded-full border-2 border-slate-300" />
+                        )}
+                      </div>
+                    </button>
+
+                    {/* Expandable Text Box - Opens when radio button / card is clicked */}
+                    {isCustomSelected && (
+                      <div className="p-3 sm:p-3.5 pt-2.5 bg-white/95 border-t border-purple-100 animate-fadeIn">
+                        <div className="relative">
+                          <textarea
+                            rows={3}
+                            autoFocus
+                            value={customKeyword}
+                            onChange={(e) => setCustomKeyword(e.target.value)}
+                            placeholder="उदा. शिरपूर जैन मधील सर्वात उत्तम कॉम्प्युटर क्लास आणि आपले सरकार सेवा केंद्र! काम वेळेत आणि अचूक होते, दिपक सरांचे मार्गदर्शन खूप छान आहे..."
+                            className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none bg-slate-50/50 text-slate-900 placeholder:text-slate-400 transition-all resize-none leading-relaxed"
+                          />
+                          <div className="flex items-center justify-between pt-1.5 px-0.5 text-[11px] text-slate-400">
+                            <span>{customKeyword.length} अक्षरे (characters)</span>
+                            {customKeyword && (
+                              <button
+                                type="button"
+                                onClick={() => setCustomKeyword('')}
+                                className="text-purple-600 hover:text-purple-800 font-semibold cursor-pointer"
+                              >
+                                Clear
+                              </button>
+                            )}
+                          </div>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Counter and status */}
+                {/* Counter and status with 1 or 2 indicator */}
                 <div className="flex items-center justify-between text-xs text-gray-500 mb-4 px-1">
-                  <p className="font-medium text-gray-500 flex items-center gap-1.5">
+                  <p className="font-medium text-gray-600 flex items-center gap-1.5">
                     <span>Selected:</span>
-                    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold text-[11px]">
-                      {selectedKeywords.length + (customKeyword.trim() ? 1 : 0)} Option(s)
+                    <span
+                      className={`inline-flex items-center justify-center px-2.5 py-0.5 rounded-full font-bold text-[11px] transition-colors ${
+                        selectedKeywords.length + (isCustomSelected ? 1 : 0) === 2
+                          ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                          : selectedKeywords.length + (isCustomSelected ? 1 : 0) === 1
+                          ? 'bg-purple-100 text-purple-700 border border-purple-200'
+                          : 'bg-slate-100 text-slate-600'
+                      }`}
+                    >
+                      {selectedKeywords.length + (isCustomSelected ? 1 : 0)} / 2 Option(s)
+                    </span>
+                    <span className="text-[11px] text-gray-400 font-normal">
+                      (कमाल २ पर्याय)
                     </span>
                   </p>
-                  {(selectedKeywords.length > 0 || customKeyword.trim().length > 0) && (
+                  {(selectedKeywords.length > 0 || isCustomSelected) && (
                     <button
                       type="button"
                       onClick={() => {
                         setSelectedKeywords([]);
                         setCustomKeyword('');
+                        setIsCustomSelected(false);
                       }}
                       className="text-purple-600 hover:text-purple-800 text-xs font-semibold cursor-pointer underline underline-offset-2"
                     >
-                      Reset selection
+                      Clear selection
                     </button>
                   )}
                 </div>
@@ -876,19 +999,29 @@ export default function App() {
             {/* FLOW 2 (Part 2): Generated AI Reviews Display */}
             {selectedRating >= 4 && generatedReviews.length > 0 && (
               <div className="pt-5 border-t border-gray-100 animate-fadeIn space-y-4">
-                {/* AI Status Badge */}
-                <div className="flex items-center justify-center mb-2">
+                {/* AI Status Badge & Change Topic Link */}
+                <div className="flex items-center justify-between mb-2">
                   <div className="px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 bg-purple-50 text-purple-700 border border-purple-100">
                     <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                     <span>AI-Powered Reviews Ready</span>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGeneratedReviews([]);
+                      setSelectedReviewIndex(-1);
+                    }}
+                    className="text-xs text-purple-600 hover:text-purple-800 font-semibold cursor-pointer underline underline-offset-2 flex items-center gap-1"
+                  >
+                    <span>विषय बदला (Change Topic)</span>
+                  </button>
                 </div>
 
                 {/* Selected Keywords Tags */}
-                {(selectedKeywords.length > 0 || customKeyword.trim().length > 0) && (
+                {(selectedKeywords.length > 0 || (isCustomSelected && customKeyword.trim().length > 0)) && (
                   <div className="p-3 rounded-xl bg-purple-50/70 border border-purple-100">
                     <p className="text-[11px] font-semibold text-purple-900 mb-1.5">
-                      Reviews based on your selection:
+                      Reviews strictly based on your selection:
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedKeywords.map((catId) => {
@@ -904,7 +1037,7 @@ export default function App() {
                           </span>
                         );
                       })}
-                      {customKeyword.trim() && (
+                      {isCustomSelected && customKeyword.trim() && (
                         <span className="px-2.5 py-1 rounded-lg text-[11px] font-semibold text-white shadow-2xs flex items-center gap-1.5 bg-indigo-600">
                           <span>✍️</span>
                           <span>"{customKeyword.trim()}"</span>
@@ -950,7 +1083,7 @@ export default function App() {
 
                             {/* Review Text */}
                             <div className="min-w-0 flex-1">
-                              {customKeyword.trim() && review === customKeyword.trim() && (
+                              {isCustomSelected && customKeyword.trim() && review === customKeyword.trim() && (
                                 <div className="mb-1">
                                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700">
                                     <Sparkles className="w-2.5 h-2.5 text-purple-600" />
@@ -1038,24 +1171,6 @@ export default function App() {
           <span>{toastMessage}</span>
         </div>
       )}
-
-      {/* Floating "Powered by DIPs" Pill Badge on Left side */}
-      <div className="fixed bottom-3 left-3 sm:bottom-4 sm:left-4 z-40 animate-fadeIn pointer-events-auto">
-        <a
-          href={BUSINESS_DATA.website}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Visit DIPs Computers Website"
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0a192f] hover:bg-[#0f2342] border border-slate-700/80 text-white shadow-xl shadow-slate-950/25 backdrop-blur-md transition-all hover:scale-105 active:scale-95 select-none no-underline font-['Plus_Jakarta_Sans',sans-serif] cursor-pointer"
-        >
-          <div className="w-3.5 h-3.5 rounded-full bg-cyan-500/20 flex items-center justify-center shrink-0">
-            <Sparkles className="w-2.5 h-2.5 text-cyan-400" />
-          </div>
-          <span className="text-[10.5px] sm:text-xs text-slate-300 font-medium tracking-wide">
-            Powered by <strong className="text-white font-bold tracking-tight font-sans">DIPs</strong>
-          </span>
-        </a>
-      </div>
     </div>
   );
 }
