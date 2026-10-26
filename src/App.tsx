@@ -43,27 +43,21 @@ const BUSINESS_DATA = {
   keywords: [
     {
       id: 'computer',
-      number: '1',
       icon: '💻',
       label: 'Computer Institute',
       details: 'MS-CIT, Tally, DTP',
-      fullText: '1. 💻 Computer Institute (MS-CIT, Tally, DTP)',
     },
     {
       id: 'csc',
-      number: '2',
       icon: '🏛️',
       label: "CSC आणि 'आपले सरकार' सेवा",
       details: 'सर्व दाखले, रेशन, योजना व शेतकरी कामे',
-      fullText: "2. 🏛️ CSC आणि 'आपले सरकार' सेवा",
     },
     {
       id: 'online',
-      number: '3',
       icon: '🖨️',
       label: 'इतर कामे',
       details: 'PAN Card, PayNearby, Online Forms',
-      fullText: '3. 🖨️ इतर कामे (PAN Card, PayNearby, Online Forms)',
     },
   ],
 };
@@ -757,18 +751,9 @@ export default function App() {
                             {kw.icon}
                           </div>
                           <div className="min-w-0">
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <span
-                                className={`text-xs font-black ${
-                                  isSelected ? 'text-purple-200' : 'text-purple-600'
-                                }`}
-                              >
-                                {kw.number}.
-                              </span>
-                              <span className="font-bold text-[13px] sm:text-sm leading-tight">
-                                {kw.label}
-                              </span>
-                            </div>
+                            <span className="font-bold text-[13px] sm:text-sm leading-tight block">
+                              {kw.label}
+                            </span>
                             <p
                               className={`text-[11px] sm:text-xs leading-snug mt-0.5 truncate ${
                                 isSelected ? 'text-purple-100 font-medium' : 'text-slate-500'
@@ -800,32 +785,30 @@ export default function App() {
                         : 'bg-slate-50/90 border-slate-200/80 hover:border-purple-200'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2 mb-1.5">
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-black text-xs shrink-0">
-                          4.
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 bg-white shadow-xs border border-slate-200/60">
+                          ✍️
                         </div>
-                        <div>
-                          <span className="font-bold text-[13px] sm:text-sm text-slate-800 flex items-center gap-1.5">
-                            <span>✍️</span>
-                            <span>Custom Reviews Text Box</span>
+                        <div className="min-w-0">
+                          <span className="font-bold text-[13px] sm:text-sm text-slate-800 leading-tight block">
+                            Custom Reviews Text Box
                           </span>
+                          <p className="text-[11px] sm:text-xs text-slate-500 leading-snug mt-0.5">
+                            स्वतःचा रिव्ह्यू लिहा किंवा कीवर्ड टाईप करा (Write your own review or topic)
+                          </p>
                         </div>
                       </div>
                       {customKeyword && (
                         <button
                           type="button"
                           onClick={() => setCustomKeyword('')}
-                          className="text-xs text-slate-400 hover:text-slate-600 font-medium cursor-pointer"
+                          className="text-xs text-slate-400 hover:text-slate-600 font-medium cursor-pointer shrink-0"
                         >
                           Clear
                         </button>
                       )}
                     </div>
-
-                    <p className="text-[11px] sm:text-xs text-slate-500 mb-2 pl-9">
-                      स्वतःचा रिव्ह्यू लिहा किंवा कीवर्ड टाईप करा (Write your own review or topic)
-                    </p>
 
                     <div className="relative">
                       <textarea
