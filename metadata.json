@@ -1,6 +1,6 @@
 {
   "name": "DIPS Google Reviews Automation",
-  "description": "DIPS Computers आणि CSC केंद्रासाठी स्मार्ट गुगल रिव्ह्यू ऑटोमेशन सिस्टीम - 450 युनिक रिव्ह्यूज आणि डायरेक्ट वन-क्लिक रिव्ह्यू फ्लो.",
-  "requestFramePermissions": ["clipboard-write"],
+  "description": "DIPS Computers आणि CSC केंद्रासाठी स्मार्ट गुगल रिव्ह्यू ऑटोमेशन सिस्टीम - 300 युनिक रिव्ह्यूज आणि डायरेक्ट वन-क्लिक रिव्ह्यू फ्लो.",
+  "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

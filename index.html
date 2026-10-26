@@ -4,15 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>DIPS Google Reviews Automation</title>
-    <meta name="description" content="DIPS Computers आणि CSC केंद्रासाठी स्मार्ट गुगल रिव्ह्यू ऑटोमेशन सिस्टीम - 450 युनिक रिव्ह्यूज आणि डायरेक्ट वन-क्लिक रिव्ह्यू फ्लो." />
+    <meta name="description" content="DIPS Computers आणि CSC केंद्रासाठी स्मार्ट गुगल रिव्ह्यू ऑटोमेशन सिस्टीम - 300 युनिक रिव्ह्यूज आणि डायरेक्ट वन-क्लिक रिव्ह्यू फ्लो." />
     <meta property="og:title" content="DIPS Google Reviews Automation" />
-    <meta property="og:description" content="DIPS Computers आणि CSC केंद्रासाठी स्मार्ट गुगल रिव्ह्यू ऑटोमेशन सिस्टीम - 450 युनिक रिव्ह्यूज आणि डायरेक्ट वन-क्लिक रिव्ह्यू फ्लो." />
+    <meta property="og:description" content="DIPS Computers आणि CSC केंद्रासाठी स्मार्ट गुगल रिव्ह्यू ऑटोमेशन सिस्टीम - 300 युनिक रिव्ह्यूज आणि डायरेक्ट वन-क्लिक रिव्ह्यू फ्लो." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#1a73e8" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+      // Suppress third-party chrome extension sandbox message timeouts
+      window.addEventListener('unhandledrejection', function(e) {
+        var reason = e && e.reason;
+        var msg = (reason && (reason.message || String(reason))) || '';
+        var stack = (reason && reason.stack) || '';
+        if (msg.indexOf('chrome: call method') !== -1 || stack.indexOf('chrome-extension://') !== -1) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      });
+      window.addEventListener('error', function(e) {
+        var msg = (e && e.message) || '';
+        var filename = (e && e.filename) || '';
+        if (msg.indexOf('chrome: call method') !== -1 || filename.indexOf('chrome-extension://') !== -1) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      });
+    </script>
   </head>
   <body class="bg-[#f8fafc] text-slate-900 antialiased selection:bg-blue-100 selection:text-blue-900 font-['Noto_Sans_Devanagari',sans-serif]">
     <div id="root"></div>
