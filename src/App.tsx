@@ -278,6 +278,9 @@ export default function App() {
     setSelectedReviewIndex(-1);
     setFeedbackSubmitted(false);
 
+    // Play star chime audio effect (magical arpeggio for 5 stars)
+    playStarChimeSound(rating);
+
     if (rating >= 4) {
       confetti({
         particleCount: rating === 5 ? 50 : 30,
@@ -348,6 +351,9 @@ export default function App() {
       triggerToast('⚠️ कृपया १ किंवा कमाल २ पर्याय निवडा (Please select 1 or 2 topics)');
       return;
     }
+
+    // Play crisp futuristic AI magic sound effect on click
+    playGenerateReviewsSound();
 
     setIsGenerating(true);
 
@@ -556,6 +562,236 @@ export default function App() {
     }
   };
 
+  // 1. Futuristic AI Magic Whiz & Sparkle Sound when clicking 'Generate AI Reviews'
+  const playGenerateReviewsSound = () => {
+    try {
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      const audioCtx = new AudioContextClass();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+
+      const now = audioCtx.currentTime;
+
+      // Magical futuristic pitch sweep (350Hz to 1100Hz)
+      const sweepOsc = audioCtx.createOscillator();
+      const sweepGain = audioCtx.createGain();
+
+      sweepOsc.type = 'sine';
+      sweepOsc.frequency.setValueAtTime(350, now);
+      sweepOsc.frequency.exponentialRampToValueAtTime(1100, now + 0.14);
+
+      sweepGain.gain.setValueAtTime(0.001, now);
+      sweepGain.gain.linearRampToValueAtTime(0.22, now + 0.03);
+      sweepGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+      sweepOsc.connect(sweepGain);
+      sweepGain.connect(audioCtx.destination);
+      sweepOsc.start(now);
+      sweepOsc.stop(now + 0.2);
+
+      // Sparkle chime pings immediately following sweep
+      const pings = [1046.50, 1318.51, 1567.98]; // C6, E6, G6
+      pings.forEach((freq, idx) => {
+        const pingStart = now + 0.1 + idx * 0.055;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, pingStart);
+
+        gain.gain.setValueAtTime(0.001, pingStart);
+        gain.gain.linearRampToValueAtTime(0.2, pingStart + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, pingStart + 0.3);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(pingStart);
+        osc.stop(pingStart + 0.32);
+      });
+
+      setTimeout(() => {
+        try {
+          audioCtx.close();
+        } catch {}
+      }, 700);
+    } catch {
+      // Audio fallback
+    }
+  };
+
+  // 2. Premium sparkling crystal star chime sound for star ratings (5-Star & others)
+  const playStarChimeSound = (rating: number) => {
+    try {
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      const audioCtx = new AudioContextClass();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+
+      const now = audioCtx.currentTime;
+
+      if (rating === 5) {
+        // Glorious 5-star crystal sparkle chord cascade (F#5, A#5, C#6, F#6, A#6)
+        const notes = [739.99, 932.33, 1108.73, 1479.98, 1864.66];
+        notes.forEach((freq, idx) => {
+          const noteStart = now + idx * 0.05;
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(freq, noteStart);
+
+          osc2.type = 'triangle';
+          osc2.frequency.setValueAtTime(freq * 2, noteStart); // Shimmering harmonic octave
+
+          gain.gain.setValueAtTime(0.001, noteStart);
+          gain.gain.linearRampToValueAtTime(0.25, noteStart + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.42);
+
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc1.start(noteStart);
+          osc2.start(noteStart);
+          osc1.stop(noteStart + 0.45);
+          osc2.stop(noteStart + 0.45);
+        });
+      } else if (rating === 4) {
+        const notes = [659.25, 830.61, 987.77, 1318.51];
+        notes.forEach((freq, idx) => {
+          const noteStart = now + idx * 0.06;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, noteStart);
+
+          gain.gain.setValueAtTime(0.001, noteStart);
+          gain.gain.linearRampToValueAtTime(0.2, noteStart + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.35);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(noteStart);
+          osc.stop(noteStart + 0.38);
+        });
+      } else {
+        // Gentle double tap ping for 1-3 stars
+        [523.25, 659.25].forEach((freq, idx) => {
+          const noteStart = now + idx * 0.08;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, noteStart);
+
+          gain.gain.setValueAtTime(0.001, noteStart);
+          gain.gain.linearRampToValueAtTime(0.15, noteStart + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.25);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(noteStart);
+          osc.stop(noteStart + 0.28);
+        });
+      }
+
+      setTimeout(() => {
+        try {
+          audioCtx.close();
+        } catch {}
+      }, 900);
+    } catch {
+      // Audio fallback
+    }
+  };
+
+  // 3. Triumphant celebratory pop + major fanfare chime for 'Review us on Google' button
+  const playGoogleReviewFanfareSound = () => {
+    try {
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      const audioCtx = new AudioContextClass();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+
+      const now = audioCtx.currentTime;
+
+      // Initial satisfying click pop
+      const popOsc = audioCtx.createOscillator();
+      const popGain = audioCtx.createGain();
+      popOsc.type = 'sine';
+      popOsc.frequency.setValueAtTime(320, now);
+      popOsc.frequency.exponentialRampToValueAtTime(950, now + 0.04);
+
+      popGain.gain.setValueAtTime(0.001, now);
+      popGain.gain.linearRampToValueAtTime(0.25, now + 0.005);
+      popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+
+      popOsc.connect(popGain);
+      popGain.connect(audioCtx.destination);
+      popOsc.start(now);
+      popOsc.stop(now + 0.07);
+
+      // Bright major chord victory sequence (G5, C6, E6, G6)
+      const fanfare = [
+        { freq: 783.99, delay: 0.05 },  // G5
+        { freq: 1046.50, delay: 0.11 }, // C6
+        { freq: 1318.51, delay: 0.17 }, // E6
+        { freq: 1567.98, delay: 0.23 }, // G6
+      ];
+
+      fanfare.forEach(({ freq, delay }) => {
+        const noteStart = now + delay;
+        const osc = audioCtx.createOscillator();
+        const harmOsc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, noteStart);
+
+        harmOsc.type = 'triangle';
+        harmOsc.frequency.setValueAtTime(freq * 1.25, noteStart); // Major 3rd harmonic richness
+
+        gain.gain.setValueAtTime(0.001, noteStart);
+        gain.gain.linearRampToValueAtTime(0.28, noteStart + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.5);
+
+        osc.connect(gain);
+        harmOsc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(noteStart);
+        harmOsc.start(noteStart);
+        osc.stop(noteStart + 0.52);
+        harmOsc.stop(noteStart + 0.52);
+      });
+
+      setTimeout(() => {
+        try {
+          audioCtx.close();
+        } catch {}
+      }, 1000);
+    } catch {
+      // Audio fallback
+    }
+  };
+
   // Copy specific review text with rewarding celebratory confetti and audio ping
   const handleCopyReview = async (text: string, index: number, e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -625,8 +861,8 @@ export default function App() {
     markReviewAsUsed(reviewText);
     triggerToast('✅ Review copied to clipboard! Opening Google...');
 
-    // Trigger audio chime simultaneously with confetti
-    playPingSound();
+    // Trigger audio celebration fanfare simultaneously with confetti
+    playGoogleReviewFanfareSound();
 
     try {
       // Google 4-color grand celebration
@@ -704,10 +940,15 @@ export default function App() {
                 {BUSINESS_DATA.prefix}
               </p>
 
-              {/* Business Name */}
+              {/* Business Name with Official Green Verified Tick Badge */}
               <h1 className="text-2xl sm:text-3xl font-extrabold mb-1 tracking-tight drop-shadow-sm flex items-center justify-center gap-1.5">
                 <span>{BUSINESS_DATA.name}</span>
-                <BadgeCheck className="w-5 h-5 text-amber-300 drop-shadow-xs shrink-0" />
+                <span className="inline-flex items-center justify-center shrink-0" title="Official Verified Center">
+                  <svg className="w-5.5 h-5.5 sm:w-6 sm:h-6 text-emerald-400 drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                    <path d="m9 12 2 2 4-4" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                  </svg>
+                </span>
               </h1>
 
               {/* Center & Services Subtitle */}
@@ -1054,25 +1295,23 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Counter and status with 1 or 2 indicator */}
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-4 px-1">
-                  <p className="font-medium text-gray-600 flex items-center gap-1.5">
-                    <span>Selected:</span>
+                {/* Clean selection counter bar */}
+                <div className="bg-slate-50/90 border border-slate-200/80 rounded-xl px-3 py-2 mb-4 flex items-center justify-between gap-2 shadow-xs">
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="font-semibold text-slate-700">Selected:</span>
                     <span
-                      className={`inline-flex items-center justify-center px-2.5 py-0.5 rounded-full font-bold text-[11px] transition-colors ${
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-bold text-xs transition-all ${
                         selectedKeywords.length + (isCustomSelected ? 1 : 0) === 2
-                          ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                          ? 'bg-purple-100 text-purple-900 border border-purple-300'
                           : selectedKeywords.length + (isCustomSelected ? 1 : 0) === 1
-                          ? 'bg-purple-100 text-purple-700 border border-purple-200'
-                          : 'bg-slate-100 text-slate-600'
+                          ? 'bg-purple-50 text-purple-800 border border-purple-200'
+                          : 'bg-white text-slate-500 border border-slate-200'
                       }`}
                     >
-                      {selectedKeywords.length + (isCustomSelected ? 1 : 0)} / 2 Option(s)
+                      {selectedKeywords.length + (isCustomSelected ? 1 : 0)}/2
                     </span>
-                    <span className="text-[11px] text-gray-400 font-normal">
-                      (कमाल २ पर्याय)
-                    </span>
-                  </p>
+                  </div>
+
                   {(selectedKeywords.length > 0 || isCustomSelected) && (
                     <button
                       type="button"
@@ -1081,9 +1320,10 @@ export default function App() {
                         setCustomKeyword('');
                         setIsCustomSelected(false);
                       }}
-                      className="text-purple-600 hover:text-purple-800 text-xs font-semibold cursor-pointer underline underline-offset-2"
+                      className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-slate-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-all border border-slate-200/80 hover:border-purple-200 shadow-2xs active:scale-95 cursor-pointer"
                     >
-                      Clear selection
+                      <RotateCcw className="w-3 h-3 text-slate-500 hover:text-purple-600 transition-colors" />
+                      <span>Clear</span>
                     </button>
                   )}
                 </div>
